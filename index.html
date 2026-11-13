@@ -1,0 +1,1978 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Không Gian Đội Số - Liên Đội Trường Tiểu Học Vĩnh Hải 2</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Baloo 2 & Nunito thân thiện với học sinh tiểu học -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tone.js để mô phỏng âm thanh trống Đội sinh động -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        display: ['"Baloo 2"', 'cursive', 'sans-serif'],
+                        body: ['"Nunito"', 'sans-serif'],
+                    },
+                    colors: {
+                        doiRed: '#E53935',
+                        doiRedDark: '#C62828',
+                        doiYellow: '#FFB300',
+                        doiGold: '#FDD835',
+                        doiBlue: '#0288D1',
+                        doiBlueLight: '#E1F5FE',
+                        doiGreen: '#43A047',
+                        doiGreenLight: '#E8F5E9',
+                        doiCream: '#FFFDF7',
+                    },
+                    boxShadow: {
+                        'playful': '0 6px 0 rgba(0, 0, 0, 0.08)',
+                        'playful-red': '0 6px 0 #B71C1C',
+                        'playful-yellow': '0 6px 0 #F57F17',
+                        'playful-blue': '0 6px 0 #01579B',
+                        'playful-green': '0 6px 0 #1B5E20',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #FFFDF7;
+            color: #1E293B;
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, .font-display {
+            font-family: 'Baloo 2', cursive, sans-serif;
+        }
+
+        /* Chế độ chữ lớn thân thiện cho học sinh lớp nhỏ */
+        body.kid-friendly-mode {
+            font-size: 1.15rem;
+            line-height: 1.75;
+        }
+        body.kid-friendly-mode p,
+        body.kid-friendly-mode span,
+        body.kid-friendly-mode button {
+            letter-spacing: 0.015em;
+        }
+
+        /* Hiệu ứng chuyển động vui tươi */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+        @keyframes pulseStar {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.12); }
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.92) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes drumBeat {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.18); }
+            100% { transform: scale(1); }
+        }
+
+        .animate-float {
+            animation: floatSlow 4s ease-in-out infinite;
+        }
+        .animate-star {
+            animation: pulseStar 2.5s ease-in-out infinite;
+        }
+        .animate-pop {
+            animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .drum-active {
+            animation: drumBeat 0.18s ease-out;
+        }
+
+        /* Nút bấm nổi 3D vui nhộn */
+        .btn-bounce {
+            transition: all 0.15s ease;
+        }
+        .btn-bounce:hover {
+            transform: translateY(-2px);
+        }
+        .btn-bounce:active {
+            transform: translateY(3px);
+            box-shadow: none !important;
+        }
+
+        /* Họa tiết chấm bi nền nhẹ nhàng */
+        .bg-polka {
+            background-image: radial-gradient(#FFB30033 2px, transparent 2px), radial-gradient(#0288D122 2px, #FFFDF7 2px);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+        }
+
+        /* Hạt sao & hoa bay khi tương tác */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 24px;
+            animation: flyUp 1.4s ease-out forwards;
+        }
+        @keyframes flyUp {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0.6) rotate(0deg);
+            }
+            60% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.3) rotate(var(--rot));
+            }
+        }
+
+        /* Thanh cuộn tinh tế */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFF8E1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FFB300;
+            border-radius: 9999px;
+            border: 2px solid #FFF8E1;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #E53935;
+        }
+    </style>
+</head>
+<body class="bg-polka min-h-screen flex flex-col">
+
+    <!-- ================= KHẨU HIỆU ĐỘI TRÊN CÙNG ================= -->
+    <div class="bg-gradient-to-r from-doiRedDark via-doiRed to-doiRedDark text-white py-2 px-4 text-center border-b-4 border-doiYellow shadow-sm">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm md:text-base font-extrabold tracking-wide">
+            <span class="inline-flex items-center gap-1 bg-doiYellow text-red-900 px-2.5 py-0.5 rounded-full text-xs uppercase shadow-sm">
+                ★ Khẩu hiệu Đội
+            </span>
+            <span>“VÌ TỔ QUỐC XÃ HỘI CHỦ NGHĨA – VÌ LÝ TƯỞNG CỦA BÁC HỒ VĨ ĐẠI: <span class="text-doiGold underline decoration-wavy">SẴN SÀNG!</span>”</span>
+        </div>
+    </div>
+
+    <!-- ================= HEADER (ĐẦU TRANG) ================= -->
+    <header class="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b-2 border-amber-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col lg:flex-row items-center justify-between gap-3">
+            <!-- Logo Huy Hiệu Đội chuẩn quy định + Tên Liên Đội -->
+            <div class="flex items-center gap-3.5 cursor-pointer group" onclick="switchTab('all')">
+                <!-- SVG Huy hiệu Đội TNTP Hồ Chí Minh chuẩn quy định (Nền đỏ viền vàng, sao vàng bên trái, búp măng vàng gân xanh, dải băng SẴN SÀNG) -->
+                <div class="w-16 h-16 sm:w-[72px] sm:h-[72px] flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+                    <svg viewBox="0 0 200 215" class="w-full h-full drop-shadow-md" aria-label="Huy hiệu Đội TNTP Hồ Chí Minh chuẩn quy định">
+                        <defs>
+                            <!-- Đường cong cho chữ SẴN SÀNG -->
+                            <path id="readyBannerPath" d="M 30,185 Q 100,165 170,185" />
+                        </defs>
+                        <!-- Hình tròn nền đỏ cờ viền vàng tươi -->
+                        <circle cx="100" cy="96" r="88" fill="#FF0000" stroke="#FFF200" stroke-width="5"/>
+
+                        <!-- Ngôi sao vàng 5 cánh nằm ở góc trên bên trái -->
+                        <polygon points="56,33 63,53 84,53 67,65 73,85 56,73 39,85 45,65 28,53 49,53"
+                                 fill="#FFF200"/>
+
+                        <!-- Búp măng non màu vàng với các đốt phân tầng viền xanh lá đậm -->
+                        <!-- Thân búp măng tổng thể -->
+                        <path d="M 114,22
+                                 C 103,36 93,54 86,74
+                                 C 81,88 77,108 75,134
+                                 L 154,134
+                                 C 152,106 147,84 140,66
+                                 C 133,48 124,33 114,22 Z"
+                              fill="#FFF200" stroke="#007A29" stroke-width="2.5" stroke-linejoin="round"/>
+
+                        <!-- Các đường gân/bẹ măng xanh lá đậm đặc trưng -->
+                        <path d="M 103,36 Q 116,45 123,55" fill="none" stroke="#007A29" stroke-width="4.5" stroke-linecap="round"/>
+                        <path d="M 131,47 Q 116,60 107,75" fill="none" stroke="#007A29" stroke-width="4.5" stroke-linecap="round"/>
+                        <path d="M 92,61 Q 114,75 126,91" fill="none" stroke="#007A29" stroke-width="4.5" stroke-linecap="round"/>
+                        <path d="M 142,76 Q 120,93 108,112" fill="none" stroke="#007A29" stroke-width="4.5" stroke-linecap="round"/>
+                        <path d="M 82,91 Q 108,110 124,132" fill="none" stroke="#007A29" stroke-width="5" stroke-linecap="round"/>
+
+                        <!-- Hai tàu lá măng màu xanh lá viền vàng xòe sang hai bên -->
+                        <!-- Lá măng bên trái -->
+                        <path d="M 98,136
+                                 C 84,122 52,108 24,128
+                                 C 35,127 44,128 51,132
+                                 C 41,133 34,136 30,141
+                                 C 42,138 53,138 61,141
+                                 C 53,143 48,146 45,150
+                                 C 62,143 78,142 93,148 Z"
+                              fill="#007A29" stroke="#FFF200" stroke-width="3.5" stroke-linejoin="round"/>
+
+                        <!-- Lá măng bên phải -->
+                        <path d="M 103,136
+                                 C 118,120 152,110 177,131
+                                 C 166,129 156,130 149,134
+                                 C 159,135 166,138 170,143
+                                 C 158,140 147,140 139,143
+                                 C 147,145 152,148 155,152
+                                 C 138,144 122,143 107,149 Z"
+                              fill="#007A29" stroke="#FFF200" stroke-width="3.5" stroke-linejoin="round"/>
+
+                        <!-- Dải băng rôn xanh lá viền vàng uốn cong bên dưới -->
+                        <path d="M 22,158 Q 100,136 178,158 L 170,196 Q 100,175 30,196 Z"
+                              fill="#007A29" stroke="#FFF200" stroke-width="4" stroke-linejoin="round"/>
+
+                        <!-- Chữ "SẴN SÀNG" in hoa đậm nét màu vàng uốn theo dải băng -->
+                        <text fill="#FFF200" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="21" letter-spacing="1.2">
+                            <textPath href="#readyBannerPath" startOffset="50%" text-anchor="middle">
+                                SẴN SÀNG
+                            </textPath>
+                        </text>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-doiBlue bg-doiBlueLight px-2.5 py-0.5 rounded-full">
+                            HỘI ĐỒNG ĐỘI PHƯỜNG BẮC NHA TRANG
+                        </span>
+                    </div>
+                    <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-doiRed leading-tight">
+                        KHÔNG GIAN ĐỘI SỐ
+                    </h1>
+                    <p class="text-xs sm:text-sm font-bold text-slate-700">
+                        LIÊN ĐỘI TRƯỜNG TIỂU HỌC VĨNH HẢI 2
+                    </p>
+                </div>
+            </div>
+
+            <!-- Thanh tìm kiếm nhanh & Nút chế độ đọc thân thiện -->
+            <div class="flex flex-wrap items-center justify-center gap-2.5 w-full lg:w-auto">
+                <div class="relative flex-grow sm:flex-grow-0 sm:w-64">
+                    <input type="text" id="globalSearchInput" onkeyup="handleGlobalSearch(event)"
+                        placeholder="Tìm gương tốt, nghi thức, lịch sử..."
+                        class="w-full pl-10 pr-4 py-2 rounded-2xl border-2 border-amber-300 bg-amber-50/60 focus:bg-white focus:border-doiBlue focus:outline-none text-sm font-semibold text-slate-700 transition">
+                    <svg class="w-5 h-5 text-amber-500 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+
+                <button id="kidModeBtn" onclick="toggleKidFriendlyMode()"
+                    class="btn-bounce flex items-center gap-1.5 bg-doiBlue hover:bg-sky-600 text-white font-bold text-xs sm:text-sm px-3.5 py-2.5 rounded-2xl shadow-playful-blue cursor-pointer"
+                    title="Phóng to chữ và tăng khoảng cách dòng giúp các em nhỏ dễ đọc hơn">
+                    <span class="text-base">👓</span>
+                    <span id="kidModeLabel">Chữ to dễ đọc</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= HERO BANNER CHÀO MỪNG ================= -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-sky-500 via-doiBlue to-teal-500 text-white py-8 sm:py-10 px-4 border-b-4 border-doiYellow">
+        <!-- Họa tiết trang trí nền SVG (Đám mây, tia nắng, ngôi sao) -->
+        <svg class="absolute top-3 left-6 w-20 h-20 text-yellow-300 opacity-30 animate-float" viewBox="0 0 100 100" fill="currentColor">
+            <circle cx="50" cy="50" r="22"/>
+            <g stroke="currentColor" stroke-width="6" stroke-linecap="round">
+                <line x1="50" y1="8" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="92"/>
+                <line x1="8" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="92" y2="50"/>
+                <line x1="20" y1="20" x2="29" y2="29"/><line x1="71" y1="71" x2="80" y2="80"/>
+                <line x1="80" y1="20" x2="71" y2="29"/><line x1="29" y1="71" x2="20" y2="80"/>
+            </g>
+        </svg>
+        <svg class="absolute bottom-2 right-8 w-28 h-16 text-white opacity-20" viewBox="0 0 120 60" fill="currentColor">
+            <path d="M25,50 L95,50 C108,50 115,40 112,29 C110,20 100,16 91,18 C87,7 75,2 63,5 C53,7 46,15 45,25 C34,23 22,29 20,40 C19,45 21,50 25,50 Z"/>
+        </svg>
+
+        <div class="max-w-7xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            <!-- Lời chào mừng bên trái -->
+            <div class="lg:col-span-7 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm border border-white/40 px-3.5 py-1 rounded-full text-xs sm:text-sm font-extrabold mb-3">
+                    <span>🌟</span>
+                    <span>Chào mừng các em Đội viên & Nhi đồng Vĩnh Hải 2!</span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight drop-shadow-sm mb-3">
+                    Thiếu Nhi Vĩnh Hải 2 <br>
+                    <span class="text-doiGold">Học Tập Tốt – Rèn Luyện Chăm!</span>
+                </h2>
+                <p class="text-sky-50 text-sm sm:text-base md:text-lg font-semibold max-w-2xl mx-auto lg:mx-0 mb-5">
+                    Ngôi nhà chung trực tuyến lưu giữ truyền thống vẻ vang của Đội, lan tỏa vườn hoa nghìn việc tốt, rèn luyện nghi thức và chắp cánh sáng tạo tuổi thơ phố biển Nha Trang.
+                </p>
+
+                <!-- Các con số thống kê vui nhộn -->
+                <div class="grid grid-cols-3 gap-2.5 sm:gap-4 max-w-xl mx-auto lg:mx-0">
+                    <div class="bg-white/95 text-slate-800 rounded-2xl p-3 text-center shadow-playful border-2 border-doiYellow">
+                        <div class="text-xl sm:text-3xl font-extrabold text-doiRed font-display">24</div>
+                        <div class="text-xs sm:text-sm font-bold text-slate-600">Chi đội & Lớp Sao</div>
+                    </div>
+                    <div class="bg-white/95 text-slate-800 rounded-2xl p-3 text-center shadow-playful border-2 border-doiYellow">
+                        <div class="text-xl sm:text-3xl font-extrabold text-doiBlue font-display">850+</div>
+                        <div class="text-xs sm:text-sm font-bold text-slate-600">Đội viên & Nhi đồng</div>
+                    </div>
+                    <div class="bg-white/95 text-slate-800 rounded-2xl p-3 text-center shadow-playful border-2 border-doiYellow">
+                        <div id="heroGoodDeedCount" class="text-xl sm:text-3xl font-extrabold text-doiGreen font-display">1.258</div>
+                        <div class="text-xs sm:text-sm font-bold text-slate-600">Việc tốt ghi nhận</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Minh họa SVG Khăn quàng đỏ & Trống Đội bên phải -->
+            <div class="lg:col-span-5 flex flex-col items-center justify-center">
+                <div class="bg-white/15 backdrop-blur-md border-2 border-white/40 rounded-3xl p-5 w-full max-w-md shadow-xl">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-extrabold uppercase tracking-wider bg-doiRed text-white px-3 py-1 rounded-full">
+                            Khám phá nhanh 5 Góc Đội
+                        </span>
+                        <span class="text-xl animate-star">⭐</span>
+                    </div>
+                    <div class="grid grid-cols-1 gap-2">
+                        <button onclick="switchTab('truyen-thong')" class="btn-bounce flex items-center justify-between bg-white text-slate-800 hover:bg-amber-50 px-4 py-2.5 rounded-2xl font-bold text-sm shadow-sm cursor-pointer">
+                            <span class="flex items-center gap-2.5"><span class="text-lg">🚩</span> Góc truyền thống Đội</span>
+                            <span class="text-doiRed font-extrabold">→</span>
+                        </button>
+                        <button onclick="switchTab('nghin-viec-tot')" class="btn-bounce flex items-center justify-between bg-white text-slate-800 hover:bg-amber-50 px-4 py-2.5 rounded-2xl font-bold text-sm shadow-sm cursor-pointer">
+                            <span class="flex items-center gap-2.5"><span class="text-lg">🌻</span> Vườn hoa nghìn việc tốt</span>
+                            <span class="text-doiYellow font-extrabold">→</span>
+                        </button>
+                        <button onclick="switchTab('nghi-thuc')" class="btn-bounce flex items-center justify-between bg-white text-slate-800 hover:bg-amber-50 px-4 py-2.5 rounded-2xl font-bold text-sm shadow-sm cursor-pointer">
+                            <span class="flex items-center gap-2.5"><span class="text-lg">🥁</span> Cẩm nang Nghi thức Đội</span>
+                            <span class="text-doiBlue font-extrabold">→</span>
+                        </button>
+                        <button onclick="switchTab('sang-tao')" class="btn-bounce flex items-center justify-between bg-white text-slate-800 hover:bg-amber-50 px-4 py-2.5 rounded-2xl font-bold text-sm shadow-sm cursor-pointer">
+                            <span class="flex items-center gap-2.5"><span class="text-lg">🎨</span> Góc sáng tạo Măng non</span>
+                            <span class="text-doiGreen font-extrabold">→</span>
+                        </button>
+                        <button onclick="switchTab('hop-thu')" class="btn-bounce flex items-center justify-between bg-white text-slate-800 hover:bg-amber-50 px-4 py-2.5 rounded-2xl font-bold text-sm shadow-sm cursor-pointer">
+                            <span class="flex items-center gap-2.5"><span class="text-lg">💌</span> Hộp thư Búp măng lắng nghe</span>
+                            <span class="text-pink-600 font-extrabold">→</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= THANH ĐIỀU HƯỚNG 5 CHUYÊN MỤC ================= -->
+    <nav aria-label="Chuyên mục Không gian Đội số" class="max-w-7xl mx-auto w-full px-4 pt-6 pb-2">
+        <div class="bg-white rounded-3xl p-2.5 border-2 border-amber-200 shadow-playful flex flex-wrap items-center justify-center gap-2">
+            <button onclick="switchTab('all')" data-tab="all"
+                class="nav-pill btn-bounce px-4 py-2.5 rounded-2xl font-extrabold text-sm flex items-center gap-2 cursor-pointer bg-slate-800 text-white shadow-sm">
+                <span>🏫</span> Tất cả chuyên mục
+            </button>
+            <button onclick="switchTab('truyen-thong')" data-tab="truyen-thong"
+                class="nav-pill btn-bounce px-4 py-2.5 rounded-2xl font-extrabold text-sm flex items-center gap-2 cursor-pointer bg-red-50 text-doiRed hover:bg-red-100">
+                <span>🚩</span> Góc truyền thống Đội
+            </button>
+            <button onclick="switchTab('nghin-viec-tot')" data-tab="nghin-viec-tot"
+                class="nav-pill btn-bounce px-4 py-2.5 rounded-2xl font-extrabold text-sm flex items-center gap-2 cursor-pointer bg-amber-50 text-amber-700 hover:bg-amber-100">
+                <span>🌻</span> Vườn hoa nghìn việc tốt
+            </button>
+            <button onclick="switchTab('nghi-thuc')" data-tab="nghi-thuc"
+                class="nav-pill btn-bounce px-4 py-2.5 rounded-2xl font-extrabold text-sm flex items-center gap-2 cursor-pointer bg-sky-50 text-doiBlue hover:bg-sky-100">
+                <span>🥁</span> Cẩm nang Nghi thức Đội
+            </button>
+            <button onclick="switchTab('sang-tao')" data-tab="sang-tao"
+                class="nav-pill btn-bounce px-4 py-2.5 rounded-2xl font-extrabold text-sm flex items-center gap-2 cursor-pointer bg-emerald-50 text-doiGreen hover:bg-emerald-100">
+                <span>🎨</span> Góc sáng tạo Măng non
+            </button>
+            <button onclick="switchTab('hop-thu')" data-tab="hop-thu"
+                class="nav-pill btn-bounce px-4 py-2.5 rounded-2xl font-extrabold text-sm flex items-center gap-2 cursor-pointer bg-purple-50 text-purple-700 hover:bg-purple-100">
+                <span>💌</span> Hộp thư Búp măng lắng nghe
+            </button>
+        </div>
+
+        <!-- Thanh thông báo kết quả tìm kiếm (ẩn mặc định) -->
+        <div id="searchStatusBanner" class="hidden mt-4 bg-amber-100 border-2 border-amber-400 text-amber-900 px-4 py-3 rounded-2xl flex items-center justify-between">
+            <span id="searchStatusText" class="font-bold text-sm"></span>
+            <button onclick="clearSearch()" class="bg-amber-500 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl hover:bg-amber-600 cursor-pointer">
+                Xóa tìm kiếm
+            </button>
+        </div>
+    </nav>
+
+    <!-- ================= NỘI DUNG CHÍNH 5 CHUYÊN MỤC ================= -->
+    <main class="max-w-7xl mx-auto w-full px-4 py-6 space-y-12 flex-grow">
+
+        <!-- =====================================================================
+             CHUYÊN MỤC 1: GÓC TRUYỀN THỐNG ĐỘI
+        ===================================================================== -->
+        <section id="sec-truyen-thong" class="portal-section animate-pop" data-category="truyen-thong">
+            <!-- Tiêu đề chuyên mục -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-6 bg-gradient-to-r from-doiRed to-red-500 text-white p-4 sm:p-5 rounded-3xl shadow-playful-red">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl shadow-inner">
+                        🚩
+                    </div>
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-yellow-200">Chuyên mục 01</span>
+                        <h2 class="text-xl sm:text-3xl font-extrabold">Góc Truyền Thống Đội & Quê Hương</h2>
+                    </div>
+                </div>
+                <span class="bg-doiYellow text-red-950 font-extrabold text-xs sm:text-sm px-3.5 py-1.5 rounded-full shadow-sm">
+                    Uống nước nhớ nguồn • Tự hào Khánh Hòa
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Cột trái: Dòng thời gian Lịch sử Đội & 5 Điều Bác Hồ dạy -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Timeline Lịch sử Đội -->
+                    <div class="bg-white rounded-3xl p-5 sm:p-6 border-2 border-red-200 shadow-playful searchable-card">
+                        <h3 class="text-xl sm:text-2xl font-extrabold text-doiRed flex items-center gap-2 mb-4">
+                            <span>📜</span> Dòng Thời Gian Lịch Sử Đội TNTP Hồ Chí Minh
+                        </h3>
+                        <div class="relative border-l-4 border-doiYellow ml-3 space-y-5 pl-6">
+                            <!-- Mốc 1 -->
+                            <div class="relative">
+                                <span class="absolute -left-9 top-1 w-6 h-6 rounded-full bg-doiRed text-white text-xs font-extrabold flex items-center justify-center ring-4 ring-red-100">1</span>
+                                <div class="bg-red-50/70 p-3.5 rounded-2xl border border-red-100">
+                                    <span class="inline-block bg-doiRed text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full mb-1">15/5/1941</span>
+                                    <h4 class="font-extrabold text-base sm:text-lg text-slate-800">Ngày thành lập Đội tại Pác Bó (Cao Bằng)</h4>
+                                    <p class="text-sm text-slate-600 mt-1">
+                                        Đội Nhi đồng Cứu quốc được thành lập với 5 đội viên đầu tiên: <strong>Nông Văn Dền (Kim Đồng)</strong> làm Đội trưởng, cùng Nông Văn Thàn, Lý Văn Tịnh, Lý Thị Nì và Lý Thị Xậu.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Mốc 2 -->
+                            <div class="relative">
+                                <span class="absolute -left-9 top-1 w-6 h-6 rounded-full bg-doiYellow text-red-900 text-xs font-extrabold flex items-center justify-center ring-4 ring-amber-100">2</span>
+                                <div class="bg-amber-50/70 p-3.5 rounded-2xl border border-amber-100">
+                                    <span class="inline-block bg-amber-500 text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full mb-1">15/5/1961</span>
+                                    <h4 class="font-extrabold text-base sm:text-lg text-slate-800">Bác Hồ gửi thư căn dặn 5 điều cho thiếu nhi</h4>
+                                    <p class="text-sm text-slate-600 mt-1">
+                                        Nhân kỷ niệm 20 năm ngày thành lập Đội, Bác Hồ kính yêu đã gửi thư khen ngợi và nêu rõ <strong>5 điều Bác Hồ dạy</strong> – kim chỉ nam cho thiếu nhi Việt Nam học tập và rèn luyện.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Mốc 3 -->
+                            <div class="relative">
+                                <span class="absolute -left-9 top-1 w-6 h-6 rounded-full bg-doiBlue text-white text-xs font-extrabold flex items-center justify-center ring-4 ring-sky-100">3</span>
+                                <div class="bg-sky-50/70 p-3.5 rounded-2xl border border-sky-100">
+                                    <span class="inline-block bg-doiBlue text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full mb-1">30/1/1970</span>
+                                    <h4 class="font-extrabold text-base sm:text-lg text-slate-800">Đội vinh dự mang tên Bác Hồ kính yêu</h4>
+                                    <p class="text-sm text-slate-600 mt-1">
+                                        Ban Chấp hành Trung ương Đảng quyết định cho Đội được mang tên: <strong>Đội Thiếu niên Tiền phong Hồ Chí Minh</strong>.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chuyên mục: Tự hào quê hương Khánh Hòa -->
+                    <div class="bg-gradient-to-br from-sky-50 to-teal-50 rounded-3xl p-5 sm:p-6 border-2 border-sky-200 shadow-playful searchable-card">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-xl sm:text-2xl font-extrabold text-doiBlue flex items-center gap-2">
+                                <span>🌊</span> Tự Hào Quê Hương Khánh Hòa & Nha Trang
+                            </h3>
+                            <span class="text-2xl">🏝️</span>
+                        </div>
+                        <p class="text-sm text-slate-700 mb-4 font-semibold">
+                            Nha Trang – Khánh Hòa là mảnh đất “Xứ Trầm, Biển Yến” giàu truyền thống anh hùng cách mạng. Mỗi đội viên Trường Tiểu học Vĩnh Hải 2 luôn tự hào về quê hương mình:
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="bg-white p-3.5 rounded-2xl border border-sky-100 shadow-sm">
+                                <div class="font-extrabold text-doiRed text-sm flex items-center gap-1.5">
+                                    <span>🏛️</span> Thành cổ Diên Khánh
+                                </div>
+                                <p class="text-xs text-slate-600 mt-1">Di tích lịch sử quốc gia ghi dấu tinh thần chiến đấu kiên cường bảo vệ quê hương Khánh Hòa.</p>
+                            </div>
+                            <div class="bg-white p-3.5 rounded-2xl border border-sky-100 shadow-sm">
+                                <div class="font-extrabold text-amber-600 text-sm flex items-center gap-1.5">
+                                    <span>🛕</span> Tháp Bà Ponagar Nha Trang
+                                </div>
+                                <p class="text-xs text-slate-600 mt-1">Biểu tượng văn hóa Chăm Pa độc đáo nằm bên dòng sông Cái hiền hòa ngay gần phường Vĩnh Hải.</p>
+                            </div>
+                            <div class="bg-white p-3.5 rounded-2xl border border-sky-100 shadow-sm">
+                                <div class="font-extrabold text-doiBlue text-sm flex items-center gap-1.5">
+                                    <span>⚓</span> Quần đảo Trường Sa thân yêu
+                                </div>
+                                <p class="text-xs text-slate-600 mt-1">Phần máu thịt thiêng liêng của Tổ quốc thuộc tỉnh Khánh Hòa, nơi các chú bộ đội hải quân ngày đêm canh giữ.</p>
+                            </div>
+                            <div class="bg-white p-3.5 rounded-2xl border border-sky-100 shadow-sm">
+                                <div class="font-extrabold text-doiGreen text-sm flex items-center gap-1.5">
+                                    <span>🎖️</span> Anh hùng Võ Văn Ký
+                                </div>
+                                <p class="text-xs text-slate-600 mt-1">Người chiến sĩ cách mạng kiên trung của mặt trận Nha Trang - Khánh Hòa anh dũng.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cột phải: Lịch ngày lễ lớn & Mini Quiz Đố vui lịch sử -->
+                <div class="lg:col-span-5 space-y-6">
+                    <!-- Lịch các ngày lễ lớn trong năm -->
+                    <div class="bg-white rounded-3xl p-5 border-2 border-amber-200 shadow-playful searchable-card">
+                        <h3 class="text-lg sm:text-xl font-extrabold text-amber-700 flex items-center gap-2 mb-3">
+                            <span>📅</span> Các Ngày Lễ Lớn Trong Năm Học
+                        </h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-3 p-2 rounded-xl bg-red-50">
+                                <span class="font-extrabold text-doiRed bg-white px-2.5 py-1 rounded-lg shadow-xs min-w-[68px] text-center">03/02</span>
+                                <span class="font-bold text-slate-700">Ngày thành lập Đảng Cộng sản Việt Nam</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 rounded-xl bg-sky-50">
+                                <span class="font-extrabold text-doiBlue bg-white px-2.5 py-1 rounded-lg shadow-xs min-w-[68px] text-center">26/03</span>
+                                <span class="font-bold text-slate-700">Ngày thành lập Đoàn TNCS Hồ Chí Minh</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 rounded-xl bg-amber-50">
+                                <span class="font-extrabold text-amber-600 bg-white px-2.5 py-1 rounded-lg shadow-xs min-w-[68px] text-center">15/05</span>
+                                <span class="font-bold text-slate-700">Ngày thành lập Đội TNTP Hồ Chí Minh</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 rounded-xl bg-emerald-50">
+                                <span class="font-extrabold text-doiGreen bg-white px-2.5 py-1 rounded-lg shadow-xs min-w-[68px] text-center">20/11</span>
+                                <span class="font-bold text-slate-700">Ngày Nhà giáo Việt Nam</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 rounded-xl bg-purple-50">
+                                <span class="font-extrabold text-purple-700 bg-white px-2.5 py-1 rounded-lg shadow-xs min-w-[68px] text-center">22/12</span>
+                                <span class="font-bold text-slate-700">Ngày thành lập Quân đội Nhân dân Việt Nam</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mini-Quiz: Em Yêu Lịch Sử Đội -->
+                    <div class="bg-gradient-to-b from-amber-100 to-yellow-50 rounded-3xl p-5 border-2 border-doiYellow shadow-playful">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-lg sm:text-xl font-extrabold text-red-800 flex items-center gap-2">
+                                <span>🧠</span> Đố Vui: Em Yêu Lịch Sử Đội
+                            </h3>
+                            <span id="quizScoreBadge" class="bg-doiRed text-white text-xs font-extrabold px-3 py-1 rounded-full">
+                                Điểm: 0/3
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-600 font-semibold mb-3">
+                            Trả lời đúng cả 3 câu để nhận huy hiệu <strong>“Nhà Sử Học Nhí”</strong> nhé!
+                        </p>
+
+                        <div id="quizContainer" class="space-y-3">
+                            <!-- Nội dung câu hỏi được render bởi JS -->
+                        </div>
+
+                        <div id="quizResultBox" class="hidden mt-4 p-3.5 bg-white rounded-2xl border-2 border-doiGreen text-center animate-pop">
+                            <div class="text-2xl mb-1">🏆</div>
+                            <p id="quizResultText" class="font-extrabold text-doiGreen text-sm"></p>
+                            <button onclick="resetQuiz()" class="mt-2 bg-doiBlue text-white text-xs font-extrabold px-3.5 py-1.5 rounded-xl hover:bg-sky-600 cursor-pointer">
+                                Chơi lại từ đầu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             CHUYÊN MỤC 2: VƯỜN HOA NGHÌN VIỆC TỐT
+        ===================================================================== -->
+        <section id="sec-nghin-viec-tot" class="portal-section animate-pop" data-category="nghin-viec-tot">
+            <!-- Tiêu đề chuyên mục -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-6 bg-gradient-to-r from-amber-500 via-doiYellow to-amber-500 text-red-950 p-4 sm:p-5 rounded-3xl shadow-playful-yellow">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 bg-white/50 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl">
+                        🌻
+                    </div>
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-red-900">Chuyên mục 02</span>
+                        <h2 class="text-xl sm:text-3xl font-extrabold">Vườn Hoa Nghìn Việc Tốt</h2>
+                    </div>
+                </div>
+                <span class="bg-doiRed text-white font-extrabold text-xs sm:text-sm px-3.5 py-1.5 rounded-full shadow-sm">
+                    Mỗi ngày một việc tốt • Hoa thơm dâng Bác
+                </span>
+            </div>
+
+            <!-- Bảng vàng Đội viên tiêu biểu tháng -->
+            <div class="mb-8">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <h3 class="text-xl sm:text-2xl font-extrabold text-slate-800 flex items-center gap-2">
+                        <span>🌟</span> Gương Mặt Đội Viên Tiêu Biểu Tháng
+                    </h3>
+                    <span class="text-xs sm:text-sm font-bold text-slate-500">
+                        Bấm nút <strong class="text-doiRed">“Tặng hoa tuyên dương”</strong> để chúc mừng các bạn nhé!
+                    </span>
+                </div>
+
+                <div id="goodDeedsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <!-- Thẻ 1 -->
+                    <div class="bg-white rounded-3xl p-5 border-2 border-amber-200 shadow-playful flex flex-col justify-between searchable-card">
+                        <div>
+                            <div class="flex items-center gap-3.5 mb-3">
+                                <!-- Avatar SVG học sinh đeo khăn quàng đỏ -->
+                                <div class="w-16 h-16 rounded-2xl bg-red-100 border-2 border-doiRed flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                    <svg viewBox="0 0 80 80" class="w-14 h-14">
+                                        <circle cx="40" cy="30" r="16" fill="#FFCCBC"/>
+                                        <path d="M24,26 Q40,10 56,26 Q54,14 40,12 Q26,14 24,26" fill="#212121"/>
+                                        <circle cx="35" cy="29" r="2" fill="#212121"/><circle cx="45" cy="29" r="2" fill="#212121"/>
+                                        <path d="M36,35 Q40,39 44,35" stroke="#D84315" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                        <path d="M16,72 C16,52 64,52 64,72" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="2"/>
+                                        <polygon points="28,50 52,50 40,65" fill="#E53935"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="bg-doiRed text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">Chi đội 5A1</span>
+                                    <h4 class="font-extrabold text-lg text-slate-800 mt-1">Nguyễn Minh Anh</h4>
+                                    <p class="text-xs font-bold text-amber-600">Liên đội phó gương mẫu</p>
+                                </div>
+                            </div>
+                            <div class="bg-amber-50/80 p-3.5 rounded-2xl border border-amber-100 text-sm text-slate-700 mb-4">
+                                <strong>Việc tốt tiêu biểu:</strong> Nhặt được chiếc ví có tiền và giấy tờ trên sân trường giờ ra chơi, em đã mang nộp ngay cho Cô Tổng phụ trách để trả lại cho phụ huynh đánh rơi.
+                            </div>
+                        </div>
+                        <button onclick="praiseStudent(this, 'minh-anh')"
+                            class="btn-bounce w-full bg-gradient-to-r from-doiRed to-rose-500 text-white font-extrabold py-2.5 px-4 rounded-2xl shadow-playful-red flex items-center justify-center gap-2 cursor-pointer">
+                            <span>🌺 Tặng hoa tuyên dương</span>
+                            <span class="bg-white text-doiRed px-2.5 py-0.5 rounded-full text-xs font-black count-badge">142</span>
+                        </button>
+                    </div>
+
+                    <!-- Thẻ 2 -->
+                    <div class="bg-white rounded-3xl p-5 border-2 border-amber-200 shadow-playful flex flex-col justify-between searchable-card">
+                        <div>
+                            <div class="flex items-center gap-3.5 mb-3">
+                                <div class="w-16 h-16 rounded-2xl bg-sky-100 border-2 border-doiBlue flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                    <svg viewBox="0 0 80 80" class="w-14 h-14">
+                                        <circle cx="40" cy="30" r="16" fill="#FFCCBC"/>
+                                        <path d="M23,28 C23,12 57,12 57,28 C53,18 27,18 23,28" fill="#3E2723"/>
+                                        <circle cx="35" cy="29" r="2" fill="#212121"/><circle cx="45" cy="29" r="2" fill="#212121"/>
+                                        <path d="M35,35 Q40,40 45,35" stroke="#D84315" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                        <path d="M16,72 C16,52 64,52 64,72" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="2"/>
+                                        <polygon points="28,50 52,50 40,65" fill="#E53935"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="bg-doiBlue text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">Chi đội 4A2</span>
+                                    <h4 class="font-extrabold text-lg text-slate-800 mt-1">Trần Hoàng Gia Bảo</h4>
+                                    <p class="text-xs font-bold text-doiBlue">Đôi bạn cùng tiến</p>
+                                </div>
+                            </div>
+                            <div class="bg-sky-50/80 p-3.5 rounded-2xl border border-sky-100 text-sm text-slate-700 mb-4">
+                                <strong>Việc tốt tiêu biểu:</strong> Suốt học kỳ qua, Bảo luôn kiên trì kèm cặp giúp bạn cùng bàn tiến bộ vượt bậc môn Toán và Tiếng Việt, đạt nhiều hoa điểm 10.
+                            </div>
+                        </div>
+                        <button onclick="praiseStudent(this, 'gia-bao')"
+                            class="btn-bounce w-full bg-gradient-to-r from-doiBlue to-sky-500 text-white font-extrabold py-2.5 px-4 rounded-2xl shadow-playful-blue flex items-center justify-center gap-2 cursor-pointer">
+                            <span>⭐ Tặng hoa tuyên dương</span>
+                            <span class="bg-white text-doiBlue px-2.5 py-0.5 rounded-full text-xs font-black count-badge">118</span>
+                        </button>
+                    </div>
+
+                    <!-- Thẻ 3 -->
+                    <div class="bg-white rounded-3xl p-5 border-2 border-amber-200 shadow-playful flex flex-col justify-between searchable-card">
+                        <div>
+                            <div class="flex items-center gap-3.5 mb-3">
+                                <div class="w-16 h-16 rounded-2xl bg-emerald-100 border-2 border-doiGreen flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                    <svg viewBox="0 0 80 80" class="w-14 h-14">
+                                        <circle cx="40" cy="30" r="16" fill="#FFCCBC"/>
+                                        <circle cx="23" cy="24" r="6" fill="#212121"/><circle cx="57" cy="24" r="6" fill="#212121"/>
+                                        <path d="M24,26 Q40,12 56,26" fill="#212121"/>
+                                        <circle cx="35" cy="29" r="2" fill="#212121"/><circle cx="45" cy="29" r="2" fill="#212121"/>
+                                        <path d="M36,35 Q40,39 44,35" stroke="#D84315" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                        <path d="M16,72 C16,52 64,52 64,72" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="2"/>
+                                        <polygon points="28,50 52,50 40,65" fill="#E53935"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="bg-doiGreen text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">Lớp Nhi đồng 3A3</span>
+                                    <h4 class="font-extrabold text-lg text-slate-800 mt-1">Lê Ngọc Bảo Trâm</h4>
+                                    <p class="text-xs font-bold text-doiGreen">Dũng sĩ Kế hoạch nhỏ</p>
+                                </div>
+                            </div>
+                            <div class="bg-emerald-50/80 p-3.5 rounded-2xl border border-emerald-100 text-sm text-slate-700 mb-4">
+                                <strong>Việc tốt tiêu biểu:</strong> Tích cực thu gom giấy vụn, vỏ lon gây quỹ “Kế hoạch nhỏ” và chăm sóc bồn hoa trước lớp luôn xanh tươi, sạch đẹp.
+                            </div>
+                        </div>
+                        <button onclick="praiseStudent(this, 'bao-tram')"
+                            class="btn-bounce w-full bg-gradient-to-r from-doiGreen to-emerald-500 text-white font-extrabold py-2.5 px-4 rounded-2xl shadow-playful-green flex items-center justify-center gap-2 cursor-pointer">
+                            <span>🌻 Tặng hoa tuyên dương</span>
+                            <span class="bg-white text-doiGreen px-2.5 py-0.5 rounded-full text-xs font-black count-badge">135</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bảng xếp hạng thi đua "Chặng đua Măng non" -->
+            <div class="bg-white rounded-3xl p-5 sm:p-6 border-2 border-amber-300 shadow-playful searchable-card">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-extrabold text-doiRed flex items-center gap-2">
+                            <span>🏆</span> Bảng Thi Đua “Chặng Đua Măng Non” Các Chi Đội
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 font-semibold">
+                            Tổng hợp điểm thi đua nề nếp, học tập tốt, vệ sinh môi trường và phong trào Nghìn việc tốt tuần này.
+                        </p>
+                    </div>
+                    <span class="bg-amber-100 text-amber-800 font-extrabold text-xs px-3 py-1.5 rounded-full">
+                        Cập nhật hàng tuần
+                    </span>
+                </div>
+
+                <div class="space-y-3.5">
+                    <!-- Hạng 1 -->
+                    <div class="bg-gradient-to-r from-amber-50 to-yellow-50 p-3.5 rounded-2xl border border-amber-200">
+                        <div class="flex items-center justify-between text-sm font-extrabold mb-1.5">
+                            <span class="flex items-center gap-2 text-red-700">
+                                <span class="text-lg">🥇</span> Chi đội 5A1 – Cờ thi đua Xuất sắc
+                            </span>
+                            <span class="text-doiRed">98 / 100 ⭐</span>
+                        </div>
+                        <div class="w-full bg-amber-200/60 h-4 rounded-full overflow-hidden p-0.5">
+                            <div class="bg-gradient-to-r from-doiRed to-doiYellow h-full rounded-full transition-all duration-700" style="width: 98%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Hạng 2 -->
+                    <div class="bg-sky-50/70 p-3.5 rounded-2xl border border-sky-200">
+                        <div class="flex items-center justify-between text-sm font-extrabold mb-1.5">
+                            <span class="flex items-center gap-2 text-doiBlue">
+                                <span class="text-lg">🥈</span> Chi đội 4A2 – Chi đội Vững mạnh
+                            </span>
+                            <span class="text-doiBlue">95 / 100 ⭐</span>
+                        </div>
+                        <div class="w-full bg-sky-200/60 h-4 rounded-full overflow-hidden p-0.5">
+                            <div class="bg-gradient-to-r from-doiBlue to-cyan-400 h-full rounded-full transition-all duration-700" style="width: 95%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Hạng 3 -->
+                    <div class="bg-emerald-50/70 p-3.5 rounded-2xl border border-emerald-200">
+                        <div class="flex items-center justify-between text-sm font-extrabold mb-1.5">
+                            <span class="flex items-center gap-2 text-doiGreen">
+                                <span class="text-lg">🥉</span> Chi đội 5A3 – Chi đội Vững mạnh
+                            </span>
+                            <span class="text-doiGreen">92 / 100 ⭐</span>
+                        </div>
+                        <div class="w-full bg-emerald-200/60 h-4 rounded-full overflow-hidden p-0.5">
+                            <div class="bg-gradient-to-r from-doiGreen to-lime-500 h-full rounded-full transition-all duration-700" style="width: 92%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Hạng 4 -->
+                    <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                        <div class="flex items-center justify-between text-sm font-extrabold mb-1.5">
+                            <span class="flex items-center gap-2 text-slate-700">
+                                <span class="text-base">🏅</span> Chi đội 4A1 & Lớp Nhi đồng 3A3
+                            </span>
+                            <span class="text-slate-700">89 / 100 ⭐</span>
+                        </div>
+                        <div class="w-full bg-slate-200 h-4 rounded-full overflow-hidden p-0.5">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full transition-all duration-700" style="width: 89%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             CHUYÊN MỤC 3: CẨM NANG NGHI THỨC ĐỘI
+        ===================================================================== -->
+        <section id="sec-nghi-thuc" class="portal-section animate-pop" data-category="nghi-thuc">
+            <!-- Tiêu đề chuyên mục -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-6 bg-gradient-to-r from-doiBlue to-sky-500 text-white p-4 sm:p-5 rounded-3xl shadow-playful-blue">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl">
+                        🥁
+                    </div>
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-sky-100">Chuyên mục 03</span>
+                        <h2 class="text-xl sm:text-3xl font-extrabold">Cẩm Nang Nghi Thức Đội</h2>
+                    </div>
+                </div>
+                <span class="bg-white text-doiBlue font-extrabold text-xs sm:text-sm px-3.5 py-1.5 rounded-full shadow-sm">
+                    Đúng điều lệ • Chuẩn tác phong
+                </span>
+            </div>
+
+            <!-- 4 Thẻ hướng dẫn Nghi thức trực quan -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+                <!-- Thẻ 1: Thắt khăn quàng đỏ -->
+                <div class="bg-white rounded-3xl p-5 border-2 border-red-200 shadow-playful flex flex-col justify-between searchable-card">
+                    <div>
+                        <div class="w-full h-32 bg-red-50 rounded-2xl flex items-center justify-center mb-3 border border-red-100">
+                            <!-- Minh họa SVG Khăn quàng đỏ -->
+                            <svg viewBox="0 0 140 90" class="w-32 h-24">
+                                <polygon points="15,15 125,15 70,65" fill="#E53935" stroke="#B71C1C" stroke-width="2"/>
+                                <path d="M58,38 L82,38 L77,50 L63,50 Z" fill="#C62828" stroke="#FDD835" stroke-width="1.5"/>
+                                <polygon points="64,48 72,48 62,82 54,78" fill="#D32F2F"/>
+                                <polygon points="68,48 76,48 86,78 78,82" fill="#E53935"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-extrabold text-doiRed bg-red-50 px-2.5 py-0.5 rounded-full">Kỹ năng cơ bản</span>
+                        <h3 class="font-extrabold text-lg text-slate-800 mt-1.5">Thắt & Tháo Khăn Quàng Đỏ</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1 mb-4">
+                            Hướng dẫn chi tiết 4 bước gấp khăn, đặt khăn lên cổ áo và thắt nút vuông chuẩn đẹp.
+                        </p>
+                    </div>
+                    <button onclick="openGuideModal('khan-quang')"
+                        class="btn-bounce w-full bg-doiRed text-white font-extrabold text-sm py-2.5 rounded-2xl shadow-playful-red cursor-pointer">
+                        📖 Xem 4 bước hướng dẫn
+                    </button>
+                </div>
+
+                <!-- Thẻ 2: 7 Yêu cầu đối với Đội viên -->
+                <div class="bg-white rounded-3xl p-5 border-2 border-amber-200 shadow-playful flex flex-col justify-between searchable-card">
+                    <div>
+                        <div class="w-full h-32 bg-amber-50 rounded-2xl flex items-center justify-center mb-3 border border-amber-100">
+                            <!-- Minh họa SVG Bàn tay chào kiểu Đội viên -->
+                            <svg viewBox="0 0 120 90" class="w-28 h-24">
+                                <circle cx="60" cy="45" r="34" fill="#FFE082"/>
+                                <text x="60" y="54" text-anchor="middle" font-size="34" font-weight="900" fill="#E53935" font-family="sans-serif">7</text>
+                                <polygon points="60,12 63,20 71,20 65,25 67,33 60,28 53,33 55,25 49,20 57,20" fill="#FFB300"/>
+                            </svg>
+                        </div>
+                        <span class="text-xs font-extrabold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full">Điều lệ Đội</span>
+                        <h3 class="font-extrabold text-lg text-slate-800 mt-1.5">7 Yêu Cầu Đối Với Đội Viên</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1 mb-4">
+                            Thuộc Quốc ca, Đội ca, hô đáp khẩu hiệu Đội, chào kiểu Đội viên và các động tác cá nhân.
+                        </p>
+                    </div>
+                    <button onclick="openGuideModal('bay-yeu-cau')"
+                        class="btn-bounce w-full bg-amber-500 text-white font-extrabold text-sm py-2.5 rounded-2xl shadow-playful-yellow cursor-pointer">
+                        📖 Mở thẻ 7 yêu cầu
+                    </button>
+                </div>
+
+                <!-- Thẻ 3: Động tác cá nhân tại chỗ & di động -->
+                <div class="bg-white rounded-3xl p-5 border-2 border-sky-200 shadow-playful flex flex-col justify-between searchable-card">
+                    <div>
+                        <div class="w-full h-32 bg-sky-50 rounded-2xl flex items-center justify-center mb-3 border border-sky-100 text-5xl">
+                            🫡
+                        </div>
+                        <span class="text-xs font-extrabold text-doiBlue bg-sky-50 px-2.5 py-0.5 rounded-full">Đội hình đội ngũ</span>
+                        <h3 class="font-extrabold text-lg text-slate-800 mt-1.5">Chào Kiểu Đội Viên & Đội Hình</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1 mb-4">
+                            Ý nghĩa năm ngón tay khép kín giơ trên đầu và cách tập hợp đội hình chữ U, hàng dọc, vòng tròn.
+                        </p>
+                    </div>
+                    <button onclick="openGuideModal('chao-doi-vien')"
+                        class="btn-bounce w-full bg-doiBlue text-white font-extrabold text-sm py-2.5 rounded-2xl shadow-playful-blue cursor-pointer">
+                        📖 Xem hướng dẫn động tác
+                    </button>
+                </div>
+
+                <!-- Thẻ 4: Nút dây & Múa hát tập thể -->
+                <div class="bg-white rounded-3xl p-5 border-2 border-emerald-200 shadow-playful flex flex-col justify-between searchable-card">
+                    <div>
+                        <div class="w-full h-32 bg-emerald-50 rounded-2xl flex items-center justify-center mb-3 border border-emerald-100 text-5xl">
+                            🪢
+                        </div>
+                        <span class="text-xs font-extrabold text-doiGreen bg-emerald-50 px-2.5 py-0.5 rounded-full">Kỹ năng dã ngoại</span>
+                        <h3 class="font-extrabold text-lg text-slate-800 mt-1.5">Nút Dây Cơ Bản & Sinh Hoạt Sao</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1 mb-4">
+                            Cách thắt nút dẹt, nút thòng lọng, nút thuyền chài và các bài hát múa sinh hoạt tập thể vui nhộn.
+                        </p>
+                    </div>
+                    <button onclick="openGuideModal('nut-day')"
+                        class="btn-bounce w-full bg-doiGreen text-white font-extrabold text-sm py-2.5 rounded-2xl shadow-playful-green cursor-pointer">
+                        📖 Khám phá kỹ năng
+                    </button>
+                </div>
+            </div>
+
+            <!-- Trình mô phỏng Trống Đội tương tác -->
+            <div class="bg-gradient-to-r from-red-50 via-amber-50 to-sky-50 rounded-3xl p-5 sm:p-6 border-2 border-doiBlue/40 shadow-playful searchable-card">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+                    <div class="lg:col-span-5 flex items-center gap-4">
+                        <!-- Minh họa SVG Trống Đội -->
+                        <div id="drumVisual" class="w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 bg-white rounded-3xl p-2 border-2 border-amber-300 shadow-md flex items-center justify-center">
+                            <svg viewBox="0 0 100 100" class="w-full h-full">
+                                <!-- Thân trống đỏ -->
+                                <rect x="18" y="30" width="64" height="44" rx="6" fill="#E53935" stroke="#B71C1C" stroke-width="2.5"/>
+                                <!-- Mặt trống vàng kem -->
+                                <ellipse cx="50" cy="30" rx="32" ry="10" fill="#FFF8E1" stroke="#FFB300" stroke-width="3"/>
+                                <ellipse cx="50" cy="74" rx="32" ry="9" fill="#C62828"/>
+                                <!-- Dây chằng chữ V -->
+                                <polyline points="22,33 34,72 46,35 58,72 70,35 78,70" fill="none" stroke="#FDD835" stroke-width="2.5"/>
+                                <!-- Dùi trống -->
+                                <line x1="15" y1="12" x2="45" y2="29" stroke="#5D4037" stroke-width="3.5" stroke-linecap="round"/>
+                                <circle cx="45" cy="29" r="3.5" fill="#FFB300"/>
+                                <line x1="85" y1="12" x2="55" y2="29" stroke="#5D4037" stroke-width="3.5" stroke-linecap="round"/>
+                                <circle cx="55" cy="29" r="3.5" fill="#FFB300"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="bg-doiBlue text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">Phòng tập trống ảo</span>
+                            <h3 class="text-lg sm:text-xl font-extrabold text-slate-800 mt-1">Luyện Nhịp Trống Đội</h3>
+                            <p id="drumStatusText" class="text-xs sm:text-sm text-slate-600 font-semibold mt-1">
+                                Bấm chọn một bài trống bên cạnh để nghe nhịp trống mô phỏng và tập gõ theo nhé!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-7 flex flex-wrap items-center justify-start lg:justify-end gap-2.5">
+                        <button onclick="playDrumPattern('chao-co')" class="btn-bounce bg-doiRed text-white font-extrabold text-xs sm:text-sm px-4 py-3 rounded-2xl shadow-playful-red cursor-pointer">
+                            🎺 Trống Chào Cờ
+                        </button>
+                        <button onclick="playDrumPattern('hanh-tien')" class="btn-bounce bg-amber-500 text-white font-extrabold text-xs sm:text-sm px-4 py-3 rounded-2xl shadow-playful-yellow cursor-pointer">
+                            🚶 Trống Hành Tiến
+                        </button>
+                        <button onclick="playDrumPattern('chao-mung')" class="btn-bounce bg-doiBlue text-white font-extrabold text-xs sm:text-sm px-4 py-3 rounded-2xl shadow-playful-blue cursor-pointer">
+                            🎉 Trống Chào Mừng
+                        </button>
+                        <button onclick="stopDrumPattern()" class="btn-bounce bg-slate-700 text-white font-extrabold text-xs sm:text-sm px-4 py-3 rounded-2xl shadow-playful cursor-pointer">
+                            ⏹ Dừng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             CHUYÊN MỤC 4: GÓC SÁNG TẠO MĂNG NON
+        ===================================================================== -->
+        <section id="sec-sang-tao" class="portal-section animate-pop" data-category="sang-tao">
+            <!-- Tiêu đề chuyên mục -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-6 bg-gradient-to-r from-doiGreen to-emerald-500 text-white p-4 sm:p-5 rounded-3xl shadow-playful-green">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl">
+                        🎨
+                    </div>
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-100">Chuyên mục 04</span>
+                        <h2 class="text-xl sm:text-3xl font-extrabold">Góc Sáng Tạo Măng Non</h2>
+                    </div>
+                </div>
+                <button onclick="openArtModal()"
+                    class="btn-bounce bg-doiYellow hover:bg-amber-400 text-red-950 font-extrabold text-xs sm:text-sm px-4 py-2.5 rounded-2xl shadow-sm cursor-pointer flex items-center gap-1.5">
+                    <span>➕</span> Gửi tác phẩm của em
+                </button>
+            </div>
+
+            <!-- Bộ lọc thể loại triển lãm -->
+            <div class="flex flex-wrap items-center gap-2 mb-5">
+                <span class="text-xs sm:text-sm font-extrabold text-slate-600 mr-1">Lọc triển lãm:</span>
+                <button onclick="filterGallery('all', this)" class="gallery-filter-btn bg-doiGreen text-white font-extrabold text-xs sm:text-sm px-3.5 py-1.5 rounded-full cursor-pointer">
+                    Tất cả (4)
+                </button>
+                <button onclick="filterGallery('tranh-ve', this)" class="gallery-filter-btn bg-white border border-slate-200 text-slate-700 hover:bg-emerald-50 font-extrabold text-xs sm:text-sm px-3.5 py-1.5 rounded-full cursor-pointer">
+                    🖌️ Tranh vẽ thiếu nhi
+                </button>
+                <button onclick="filterGallery('video', this)" class="gallery-filter-btn bg-white border border-slate-200 text-slate-700 hover:bg-emerald-50 font-extrabold text-xs sm:text-sm px-3.5 py-1.5 rounded-full cursor-pointer">
+                    🎬 Video tuyên truyền
+                </button>
+                <button onclick="filterGallery('tai-che', this)" class="gallery-filter-btn bg-white border border-slate-200 text-slate-700 hover:bg-emerald-50 font-extrabold text-xs sm:text-sm px-3.5 py-1.5 rounded-full cursor-pointer">
+                    ♻️ Sản phẩm tái chế
+                </button>
+            </div>
+
+            <!-- Lưới triển lãm tác phẩm -->
+            <div id="creativeGalleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Tác phẩm 1 -->
+                <div class="gallery-item bg-white rounded-3xl overflow-hidden border-2 border-emerald-200 shadow-playful flex flex-col justify-between searchable-card" data-type="tranh-ve">
+                    <div>
+                        <!-- Tranh minh họa SVG nghệ thuật -->
+                        <div class="h-44 bg-gradient-to-b from-sky-300 via-sky-100 to-emerald-200 relative p-3 flex items-center justify-center overflow-hidden">
+                            <svg viewBox="0 0 220 140" class="w-full h-full rounded-xl">
+                                <circle cx="180" cy="30" r="16" fill="#FDD835"/>
+                                <path d="M0,100 Q60,85 110,100 T220,95 L220,140 L0,140 Z" fill="#43A047"/>
+                                <rect x="55" y="55" width="90" height="45" fill="#FFF8E1" stroke="#E53935" stroke-width="2"/>
+                                <polygon points="48,55 100,28 152,55" fill="#E53935"/>
+                                <line x1="170" y1="35" x2="170" y2="105" stroke="#5D4037" stroke-width="3"/>
+                                <rect x="170" y="38" width="28" height="18" fill="#E53935"/>
+                                <polygon points="184,42 186,46 190,46 187,49 188,53 184,50 180,53 181,49 178,46 182,46" fill="#FDD835"/>
+                            </svg>
+                            <span class="absolute top-2.5 left-2.5 bg-doiRed text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">🖌️ Tranh vẽ</span>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-extrabold text-base text-slate-800">Ngôi Trường Vĩnh Hải 2 Xanh – Sạch – Đẹp</h4>
+                            <p class="text-xs font-bold text-doiGreen mt-1">Tác giả: Phạm Ngọc Hà My – Lớp 4A1</p>
+                            <p class="text-xs text-slate-600 mt-1.5">Bức tranh màu sáp vẽ sân trường rợp bóng cây xanh và lá cờ Tổ quốc tung bay.</p>
+                        </div>
+                    </div>
+                    <div class="px-4 pb-4 flex items-center justify-between">
+                        <button onclick="viewArtDetail('Ngôi Trường Vĩnh Hải 2 Xanh – Sạch – Đẹp', 'Phạm Ngọc Hà My – Lớp 4A1', 'Tranh vẽ màu sáp', 'Em vẽ ngôi trường Tiểu học Vĩnh Hải 2 thân yêu mỗi buổi sáng chào cờ đầu tuần với hàng cây xanh mát và nụ cười của thầy cô, bạn bè.')"
+                            class="text-xs font-extrabold text-doiBlue hover:underline cursor-pointer">
+                            🔍 Xem chi tiết
+                        </button>
+                        <button onclick="praiseStudent(this, 'art1')" class="bg-rose-50 hover:bg-rose-100 text-doiRed font-extrabold text-xs px-3 py-1.5 rounded-full cursor-pointer">
+                            ❤️ <span class="count-badge">64</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tác phẩm 2 -->
+                <div class="gallery-item bg-white rounded-3xl overflow-hidden border-2 border-emerald-200 shadow-playful flex flex-col justify-between searchable-card" data-type="tranh-ve">
+                    <div>
+                        <div class="h-44 bg-gradient-to-b from-blue-400 to-cyan-200 relative p-3 flex items-center justify-center overflow-hidden">
+                            <svg viewBox="0 0 220 140" class="w-full h-full rounded-xl">
+                                <rect x="0" y="75" width="220" height="65" fill="#0288D1"/>
+                                <path d="M0,85 Q25,78 50,85 T100,85 T150,85 T200,85 T220,85" stroke="#E1F5FE" stroke-width="2.5" fill="none"/>
+                                <polygon points="120,75 155,40 190,75" fill="#FFB74D"/>
+                                <rect x="148" y="25" width="14" height="15" fill="#FFFFFF"/>
+                                <polygon points="65,75 95,75 105,62 55,62" fill="#E53935"/>
+                                <line x1="80" y1="42" x2="80" y2="62" stroke="#FFFFFF" stroke-width="2.5"/>
+                                <rect x="80" y="42" width="18" height="11" fill="#E53935"/>
+                            </svg>
+                            <span class="absolute top-2.5 left-2.5 bg-doiRed text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">🖌️ Tranh vẽ</span>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-extrabold text-base text-slate-800">Em Yêu Biển Đảo Nha Trang – Trường Sa</h4>
+                            <p class="text-xs font-bold text-doiBlue mt-1">Tác giả: Võ Minh Khang – Lớp 5A2</p>
+                            <p class="text-xs text-slate-600 mt-1.5">Gửi tình cảm của thiếu nhi phố biển Khánh Hòa tới các chú bộ đội hải quân nơi đảo xa.</p>
+                        </div>
+                    </div>
+                    <div class="px-4 pb-4 flex items-center justify-between">
+                        <button onclick="viewArtDetail('Em Yêu Biển Đảo Nha Trang – Trường Sa', 'Võ Minh Khang – Lớp 5A2', 'Tranh màu nước', 'Là học sinh sống bên bờ biển Nha Trang xinh đẹp, em luôn biết ơn các chú bộ đội Hải quân đang ngày đêm giữ vững chủ quyền biển đảo Trường Sa.')"
+                            class="text-xs font-extrabold text-doiBlue hover:underline cursor-pointer">
+                            🔍 Xem chi tiết
+                        </button>
+                        <button onclick="praiseStudent(this, 'art2')" class="bg-rose-50 hover:bg-rose-100 text-doiRed font-extrabold text-xs px-3 py-1.5 rounded-full cursor-pointer">
+                            ❤️ <span class="count-badge">89</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tác phẩm 3 -->
+                <div class="gallery-item bg-white rounded-3xl overflow-hidden border-2 border-emerald-200 shadow-playful flex flex-col justify-between searchable-card" data-type="video">
+                    <div>
+                        <div class="h-44 bg-gradient-to-br from-amber-200 to-orange-200 relative p-3 flex flex-col items-center justify-center">
+                            <div class="w-16 h-16 bg-doiRed text-white rounded-full flex items-center justify-center text-2xl shadow-lg">
+                                ▶
+                            </div>
+                            <span class="mt-2 text-xs font-extrabold text-amber-900 bg-white/80 px-3 py-1 rounded-full">Phóng sự Măng non • 02:45</span>
+                            <span class="absolute top-2.5 left-2.5 bg-doiBlue text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">🎬 Video</span>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-extrabold text-base text-slate-800">Tuyên Truyền An Toàn Giao Thông Cổng Trường</h4>
+                            <p class="text-xs font-bold text-amber-700 mt-1">Nhóm Phát Thanh Măng Non – Khối 5</p>
+                            <p class="text-xs text-slate-600 mt-1.5">Tiểu phẩm vui nhộn nhắc nhở các bạn đội mũ bảo hiểm đạt chuẩn khi ngồi sau xe máy.</p>
+                        </div>
+                    </div>
+                    <div class="px-4 pb-4 flex items-center justify-between">
+                        <button onclick="viewArtDetail('Tuyên Truyền An Toàn Giao Thông Cổng Trường', 'Nhóm Phát Thanh Măng Non – Khối 5', 'Video tuyên truyền', 'Video ngắn do đội tuyên truyền măng non Trường Tiểu học Vĩnh Hải 2 thực hiện nhằm xây dựng mô hình Cổng trường An toàn giao thông.')"
+                            class="text-xs font-extrabold text-doiBlue hover:underline cursor-pointer">
+                            🔍 Xem nội dung
+                        </button>
+                        <button onclick="praiseStudent(this, 'art3')" class="bg-rose-50 hover:bg-rose-100 text-doiRed font-extrabold text-xs px-3 py-1.5 rounded-full cursor-pointer">
+                            ❤️ <span class="count-badge">75</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tác phẩm 4 -->
+                <div class="gallery-item bg-white rounded-3xl overflow-hidden border-2 border-emerald-200 shadow-playful flex flex-col justify-between searchable-card" data-type="tai-che">
+                    <div>
+                        <div class="h-44 bg-gradient-to-br from-emerald-200 to-teal-200 relative p-3 flex flex-col items-center justify-center">
+                            <div class="text-6xl">🪴</div>
+                            <span class="mt-1 text-xs font-extrabold text-emerald-900 bg-white/80 px-3 py-1 rounded-full">Từ chai nhựa & que kem</span>
+                            <span class="absolute top-2.5 left-2.5 bg-doiGreen text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">♻️ Tái chế</span>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-extrabold text-base text-slate-800">Chậu Cây Xinh & Hộp Bút Từ Chai Nhựa</h4>
+                            <p class="text-xs font-bold text-doiGreen mt-1">Tập thể Chi đội 4A3</p>
+                            <p class="text-xs text-slate-600 mt-1.5">Biến vỏ chai nước suối đã qua sử dụng thành những chậu sen đá trang trí góc học tập.</p>
+                        </div>
+                    </div>
+                    <div class="px-4 pb-4 flex items-center justify-between">
+                        <button onclick="viewArtDetail('Chậu Cây Xinh & Hộp Bút Từ Chai Nhựa', 'Tập thể Chi đội 4A3', 'Sản phẩm tái chế bảo vệ môi trường', 'Hưởng ứng phong trào Nói không với rác thải nhựa, các bạn lớp 4A3 đã sáng tạo ra bộ chậu cây mini hình chú mèo và chú thỏ rất đáng yêu.')"
+                            class="text-xs font-extrabold text-doiBlue hover:underline cursor-pointer">
+                            🔍 Xem chi tiết
+                        </button>
+                        <button onclick="praiseStudent(this, 'art4')" class="bg-rose-50 hover:bg-rose-100 text-doiRed font-extrabold text-xs px-3 py-1.5 rounded-full cursor-pointer">
+                            ❤️ <span class="count-badge">93</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================================
+             CHUYÊN MỤC 5: HỘP THƯ BÚP MĂNG LẮNG NGHE
+        ===================================================================== -->
+        <section id="sec-hop-thu" class="portal-section animate-pop" data-category="hop-thu">
+            <!-- Tiêu đề chuyên mục -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-6 bg-gradient-to-r from-purple-600 via-pink-500 to-rose-500 text-white p-4 sm:p-5 rounded-3xl shadow-playful">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl">
+                        💌
+                    </div>
+                    <div>
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-pink-100">Chuyên mục 05</span>
+                        <h2 class="text-xl sm:text-3xl font-extrabold">Hộp Thư Búp Măng Lắng Nghe</h2>
+                    </div>
+                </div>
+                <span class="bg-white text-purple-700 font-extrabold text-xs sm:text-sm px-3.5 py-1.5 rounded-full shadow-sm">
+                    An toàn • Thân thiện • Luôn lắng nghe em
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Cột trái: Form gửi lời nhắn tương tác -->
+                <div class="lg:col-span-7 bg-white rounded-3xl p-5 sm:p-6 border-2 border-purple-200 shadow-playful">
+                    <h3 class="text-xl sm:text-2xl font-extrabold text-purple-800 flex items-center gap-2 mb-1">
+                        <span>✍️</span> Gửi Tâm Tư & Đề Xuất Của Em
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-600 font-semibold mb-4">
+                        Mọi ý kiến đóng góp, câu chuyện việc tốt hay điều em còn băn khoăn đều được Cô Tổng phụ trách Đội trân trọng lắng nghe!
+                    </p>
+
+                    <form id="mailboxForm" onsubmit="submitMailbox(event)" class="space-y-4">
+                        <!-- Chọn chủ đề -->
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 mb-1.5">1. Em muốn gửi thư về chủ đề gì?</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="mailTopic" value="Góp ý hoạt động Đội" checked class="peer sr-only">
+                                    <div class="p-2.5 rounded-2xl border-2 border-slate-200 peer-checked:border-purple-600 peer-checked:bg-purple-50 text-xs sm:text-sm font-bold text-slate-700 flex items-center gap-2 transition">
+                                        <span>🚩</span> Góp ý hoạt động Đội
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="mailTopic" value="Kể chuyện việc tốt" class="peer sr-only">
+                                    <div class="p-2.5 rounded-2xl border-2 border-slate-200 peer-checked:border-amber-500 peer-checked:bg-amber-50 text-xs sm:text-sm font-bold text-slate-700 flex items-center gap-2 transition">
+                                        <span>🌻</span> Kể chuyện việc tốt
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="mailTopic" value="Tâm sự cùng Tổng phụ trách" class="peer sr-only">
+                                    <div class="p-2.5 rounded-2xl border-2 border-slate-200 peer-checked:border-pink-500 peer-checked:bg-pink-50 text-xs sm:text-sm font-bold text-slate-700 flex items-center gap-2 transition">
+                                        <span>💖</span> Tâm sự cùng Tổng phụ trách
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="mailTopic" value="Đề xuất góc vui chơi" class="peer sr-only">
+                                    <div class="p-2.5 rounded-2xl border-2 border-slate-200 peer-checked:border-doiBlue peer-checked:bg-sky-50 text-xs sm:text-sm font-bold text-slate-700 flex items-center gap-2 transition">
+                                        <span>🎪</span> Đề xuất góc vui chơi
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Tên & Lớp + Tùy chọn ẩn danh -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label for="senderName" class="block text-sm font-extrabold text-slate-700 mb-1">2. Họ và tên của em</label>
+                                <input type="text" id="senderName" placeholder="Ví dụ: Nguyễn Lan Anh"
+                                    class="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-purple-500 focus:outline-none text-sm font-semibold">
+                            </div>
+                            <div>
+                                <label for="senderClass" class="block text-sm font-extrabold text-slate-700 mb-1">Lớp / Chi đội</label>
+                                <input type="text" id="senderClass" placeholder="Ví dụ: Lớp 4A1"
+                                    class="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-purple-500 focus:outline-none text-sm font-semibold">
+                            </div>
+                        </div>
+
+                        <label class="inline-flex items-center gap-2 cursor-pointer select-none">
+                            <input type="checkbox" id="anonymousCheck" onchange="toggleAnonymous(this)" class="w-4 h-4 accent-purple-600 rounded">
+                            <span class="text-xs sm:text-sm font-bold text-purple-700">
+                                🕵️‍♂️ Chế độ “Búp măng bí mật” (Gửi ẩn danh không hiện tên)
+                            </span>
+                        </label>
+
+                        <!-- Chọn tâm trạng -->
+                        <div>
+                            <label class="block text-sm font-extrabold text-slate-700 mb-1.5">3. Tâm trạng của em lúc này:</label>
+                            <div class="flex flex-wrap gap-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="mood" value="😊 Vui vẻ" checked class="peer sr-only">
+                                    <span class="inline-block px-3.5 py-1.5 rounded-full border-2 border-slate-200 peer-checked:border-amber-500 peer-checked:bg-amber-100 text-xs sm:text-sm font-extrabold">
+                                        😊 Vui vẻ
+                                    </span>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="mood" value="🤩 Hào hứng" class="peer sr-only">
+                                    <span class="inline-block px-3.5 py-1.5 rounded-full border-2 border-slate-200 peer-checked:border-doiRed peer-checked:bg-red-100 text-xs sm:text-sm font-extrabold">
+                                        🤩 Hào hứng
+                                    </span>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="mood" value="🤔 Băn khoăn" class="peer sr-only">
+                                    <span class="inline-block px-3.5 py-1.5 rounded-full border-2 border-slate-200 peer-checked:border-doiBlue peer-checked:bg-sky-100 text-xs sm:text-sm font-extrabold">
+                                        🤔 Băn khoăn
+                                    </span>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="mood" value="🤗 Cần giúp đỡ" class="peer sr-only">
+                                    <span class="inline-block px-3.5 py-1.5 rounded-full border-2 border-slate-200 peer-checked:border-doiGreen peer-checked:bg-emerald-100 text-xs sm:text-sm font-extrabold">
+                                        🤗 Cần giúp đỡ
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Nội dung lời nhắn -->
+                        <div>
+                            <label for="mailMessage" class="block text-sm font-extrabold text-slate-700 mb-1">4. Lời nhắn gửi của em <span class="text-doiRed">*</span></label>
+                            <textarea id="mailMessage" rows="3" required
+                                placeholder="Hãy viết suy nghĩ, đề xuất hoặc kể về việc tốt của bạn bè cho Liên đội biết nhé..."
+                                class="w-full px-3.5 py-2.5 rounded-2xl border-2 border-slate-200 focus:border-purple-500 focus:outline-none text-sm font-semibold"></textarea>
+                        </div>
+
+                        <button type="submit"
+                            class="btn-bounce w-full bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-extrabold text-base py-3 rounded-2xl shadow-playful cursor-pointer flex items-center justify-center gap-2">
+                            <span>🚀 Gửi thư vào Hộp thư Búp măng</span>
+                        </button>
+                    </form>
+
+                    <!-- Hộp xác nhận sau khi gửi thư -->
+                    <div id="mailSuccessBanner" class="hidden mt-4 p-4 bg-emerald-50 border-2 border-doiGreen rounded-2xl animate-pop">
+                        <div class="flex items-start gap-3">
+                            <span class="text-3xl">👩‍🏫</span>
+                            <div>
+                                <h4 class="font-extrabold text-doiGreen text-base">Cô Tổng phụ trách đã nhận được thư của em!</h4>
+                                <p id="mailSuccessDetail" class="text-xs sm:text-sm text-slate-700 mt-1 font-semibold"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cột phải: Những lời nhắn tiêu biểu & Phản hồi từ Liên đội -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="bg-purple-50/90 rounded-3xl p-5 border-2 border-purple-200 shadow-playful">
+                        <h3 class="text-lg sm:text-xl font-extrabold text-purple-900 flex items-center gap-2 mb-3">
+                            <span>💬</span> Góc Hồi Âm Của Liên Đội
+                        </h3>
+                        <div id="repliedMessagesList" class="space-y-3.5">
+                            <!-- Lời nhắn 1 -->
+                            <div class="bg-white p-3.5 rounded-2xl border border-purple-100 shadow-xs searchable-card">
+                                <div class="flex items-center justify-between text-xs font-extrabold mb-1">
+                                    <span class="text-purple-700">🎪 Đề xuất góc vui chơi • Lớp 4A2</span>
+                                    <span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">🤩 Hào hứng</span>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700 font-semibold">
+                                    “Chúng em mong muốn Liên đội tổ chức thêm góc đọc truyện tranh lịch sử dưới tán cây bàng sân trường vào giờ ra chơi ạ!”
+                                </p>
+                                <div class="mt-2.5 pt-2 border-t border-dashed border-purple-200 text-xs text-doiBlue font-bold flex items-start gap-1.5">
+                                    <span>👩‍🏫</span>
+                                    <span><strong>Liên đội trả lời:</strong> Ý kiến rất hay! Tuần tới Ban Chỉ huy Liên đội sẽ triển khai mô hình “Thư viện xanh dưới tán cây” nhé!</span>
+                                </div>
+                            </div>
+
+                            <!-- Lời nhắn 2 -->
+                            <div class="bg-white p-3.5 rounded-2xl border border-purple-100 shadow-xs searchable-card">
+                                <div class="flex items-center justify-between text-xs font-extrabold mb-1">
+                                    <span class="text-amber-700">🌻 Kể chuyện việc tốt • Búp măng bí mật</span>
+                                    <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">😊 Vui vẻ</span>
+                                </div>
+                                <p class="text-xs sm:text-sm text-slate-700 font-semibold">
+                                    “Em muốn báo cáo bạn Quốc Huy lớp 3A1 đã giúp đỡ một em lớp 1 bị ngã ở cầu thang và đưa em xuống phòng y tế ạ.”
+                                </p>
+                                <div class="mt-2.5 pt-2 border-t border-dashed border-purple-200 text-xs text-doiGreen font-bold flex items-start gap-1.5">
+                                    <span>👩‍🏫</span>
+                                    <span><strong>Liên đội trả lời:</strong> Cảm ơn em đã lan tỏa việc tốt! Liên đội đã ghi nhận tuyên dương bạn Quốc Huy trong buổi chào cờ tới!</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= FOOTER (CHÂN TRANG) ================= -->
+    <footer class="bg-gradient-to-r from-red-800 via-doiRedDark to-red-900 text-white mt-10 border-t-4 border-doiYellow">
+        <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div class="md:col-span-6 flex items-start sm:items-center gap-4">
+                <!-- Huy hiệu Đội chuẩn quy định ở Footer -->
+                <div class="w-16 h-16 flex-shrink-0">
+                    <svg viewBox="0 0 200 215" class="w-full h-full drop-shadow-md" aria-hidden="true">
+                        <defs>
+                            <path id="readyBannerFooterPath" d="M 30,185 Q 100,165 170,185" />
+                        </defs>
+                        <circle cx="100" cy="96" r="88" fill="#FF0000" stroke="#FFF200" stroke-width="5"/>
+                        <polygon points="56,33 63,53 84,53 67,65 73,85 56,73 39,85 45,65 28,53 49,53" fill="#FFF200"/>
+                        <path d="M 114,22 C 103,36 93,54 86,74 C 81,88 77,108 75,134 L 154,134 C 152,106 147,84 140,66 C 133,48 124,33 114,22 Z" fill="#FFF200" stroke="#007A29" stroke-width="2.5" stroke-linejoin="round"/>
+                        <path d="M 103,36 Q 116,45 123,55" fill="none" stroke="#007A29" stroke-width="4.5" stroke-linecap="round"/>
+                        <path d="M 131,47 Q 116,60 107,75" fill="none" stroke="#007A29" stroke-width="4.5" stroke-linecap="round"/>
+                        <path d="M 92,61 Q 114,75 126,91" fill="none" stroke="#007A29" stroke-width="4.5" stroke-linecap="round"/>
+                        <path d="M 142,76 Q 120,93 108,112" fill="none" stroke="#007A29" stroke-width="4.5" stroke-linecap="round"/>
+                        <path d="M 82,91 Q 108,110 124,132" fill="none" stroke="#007A29" stroke-width="5" stroke-linecap="round"/>
+                        <path d="M 98,136 C 84,122 52,108 24,128 C 35,127 44,128 51,132 C 41,133 34,136 30,141 C 42,138 53,138 61,141 C 53,143 48,146 45,150 C 62,143 78,142 93,148 Z" fill="#007A29" stroke="#FFF200" stroke-width="3.5" stroke-linejoin="round"/>
+                        <path d="M 103,136 C 118,120 152,110 177,131 C 166,129 156,130 149,134 C 159,135 166,138 170,143 C 158,140 147,140 139,143 C 147,145 152,148 155,152 C 138,144 122,143 107,149 Z" fill="#007A29" stroke="#FFF200" stroke-width="3.5" stroke-linejoin="round"/>
+                        <path d="M 22,158 Q 100,136 178,158 L 170,196 Q 100,175 30,196 Z" fill="#007A29" stroke="#FFF200" stroke-width="4" stroke-linejoin="round"/>
+                        <text fill="#FFF200" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="21" letter-spacing="1.2">
+                            <textPath href="#readyBannerFooterPath" startOffset="50%" text-anchor="middle">SẴN SÀNG</textPath>
+                        </text>
+                    </svg>
+                </div>
+                <div class="space-y-1.5">
+                    <h3 class="text-base sm:text-lg font-extrabold text-doiGold leading-snug">
+                        LIÊN ĐỘI TRƯỜNG TIỂU HỌC VĨNH HẢI 2 - HỘI ĐỒNG ĐỘI PHƯỜNG BẮC NHA TRANG
+                    </h3>
+                    <p class="text-xs sm:text-sm text-red-100 font-semibold">
+                        📍 Địa chỉ: Phường Bắc Nha Trang, Tỉnh Khánh Hòa.
+                    </p>
+                </div>
+            </div>
+
+            <div class="md:col-span-6 bg-white/10 backdrop-blur-xs rounded-2xl p-4 border border-white/20">
+                <h4 class="font-extrabold text-doiGold text-sm sm:text-base mb-1.5">
+                    ❤️ 5 Điều Bác Hồ Dạy Thiếu Niên, Nhi Đồng:
+                </h4>
+                <ul class="text-xs sm:text-sm text-white/95 space-y-1 font-semibold">
+                    <li>1. Yêu Tổ quốc, yêu đồng bào</li>
+                    <li>2. Học tập tốt, lao động tốt</li>
+                    <li>3. Đoàn kết tốt, kỷ luật tốt</li>
+                    <li>4. Giữ gìn vệ sinh thật tốt</li>
+                    <li>5. Khiêm tốn, thật thà, dũng cảm.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="bg-red-950/60 py-3 px-4 text-center text-xs text-red-200 font-semibold">
+            © 2026 Cổng Thông Tin Không Gian Đội Số • Liên Đội Trường Tiểu học Vĩnh Hải 2 - Hội đồng Đội Phường Bắc Nha Trang.
+        </div>
+    </footer>
+
+    <!-- ================= MODAL CHI TIẾT NGHI THỨC ĐỘI ================= -->
+    <div id="guideModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-xl w-full p-6 border-4 border-doiBlue shadow-2xl animate-pop max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b-2 border-slate-100 pb-3 mb-4">
+                <h3 id="guideModalTitle" class="text-xl sm:text-2xl font-extrabold text-doiBlue"></h3>
+                <button onclick="closeModal('guideModal')" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-red-100 text-slate-600 hover:text-doiRed font-extrabold flex items-center justify-center cursor-pointer">
+                    ✕
+                </button>
+            </div>
+            <div id="guideModalBody" class="space-y-3 text-sm sm:text-base text-slate-700 leading-relaxed"></div>
+            <div class="mt-5 text-right">
+                <button onclick="closeModal('guideModal')" class="btn-bounce bg-doiBlue text-white font-extrabold px-5 py-2.5 rounded-2xl shadow-playful-blue cursor-pointer">
+                    Em đã hiểu rồi! 👍
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL XEM CHI TIẾT TÁC PHẨM SÁNG TẠO ================= -->
+    <div id="artDetailModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 border-4 border-doiGreen shadow-2xl animate-pop">
+            <div class="flex items-center justify-between border-b-2 border-slate-100 pb-3 mb-4">
+                <span id="artDetailType" class="bg-doiGreen text-white text-xs font-extrabold px-3 py-1 rounded-full"></span>
+                <button onclick="closeModal('artDetailModal')" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-red-100 text-slate-600 hover:text-doiRed font-extrabold flex items-center justify-center cursor-pointer">
+                    ✕
+                </button>
+            </div>
+            <h3 id="artDetailTitle" class="text-xl sm:text-2xl font-extrabold text-slate-800 mb-1"></h3>
+            <p id="artDetailAuthor" class="text-sm font-extrabold text-doiGreen mb-3"></p>
+            <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 text-sm text-slate-700 leading-relaxed mb-4">
+                <p id="artDetailDesc"></p>
+            </div>
+            <div class="text-right">
+                <button onclick="closeModal('artDetailModal')" class="btn-bounce bg-doiGreen text-white font-extrabold px-5 py-2 rounded-2xl shadow-playful-green cursor-pointer">
+                    Đóng lại
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL GỬI TÁC PHẨM SÁNG TẠO MỚI ================= -->
+    <div id="submitArtModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 border-4 border-doiYellow shadow-2xl animate-pop">
+            <div class="flex items-center justify-between border-b-2 border-slate-100 pb-3 mb-4">
+                <h3 class="text-xl sm:text-2xl font-extrabold text-doiGreen flex items-center gap-2">
+                    <span>🎨</span> Đăng Tác Phẩm Lên Triển Lãm
+                </h3>
+                <button onclick="closeModal('submitArtModal')" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-red-100 text-slate-600 hover:text-doiRed font-extrabold flex items-center justify-center cursor-pointer">
+                    ✕
+                </button>
+            </div>
+
+            <form onsubmit="handleAddArtwork(event)" class="space-y-3.5">
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-700 mb-1">Tên tác phẩm của em *</label>
+                    <input type="text" id="artTitleInput" required placeholder="VD: Bức tranh bảo vệ biển Nha Trang"
+                        class="w-full px-3.5 py-2 rounded-2xl border-2 border-slate-200 focus:border-doiGreen focus:outline-none text-sm font-semibold">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-extrabold text-slate-700 mb-1">Họ tên học sinh *</label>
+                        <input type="text" id="artAuthorInput" required placeholder="VD: Lê Minh Châu"
+                            class="w-full px-3.5 py-2 rounded-2xl border-2 border-slate-200 focus:border-doiGreen focus:outline-none text-sm font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-extrabold text-slate-700 mb-1">Lớp / Chi đội *</label>
+                        <input type="text" id="artClassInput" required placeholder="VD: Lớp 3A2"
+                            class="w-full px-3.5 py-2 rounded-2xl border-2 border-slate-200 focus:border-doiGreen focus:outline-none text-sm font-semibold">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-700 mb-1">Thể loại sáng tạo</label>
+                    <select id="artTypeInput" class="w-full px-3.5 py-2 rounded-2xl border-2 border-slate-200 focus:border-doiGreen focus:outline-none text-sm font-bold">
+                        <option value="tranh-ve">🖌️ Tranh vẽ thiếu nhi</option>
+                        <option value="video">🎬 Video tuyên truyền</option>
+                        <option value="tai-che">♻️ Sản phẩm tái chế</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-extrabold text-slate-700 mb-1">Lời giới thiệu ngắn về tác phẩm *</label>
+                    <textarea id="artDescInput" rows="2" required placeholder="Chia sẻ ý nghĩa tác phẩm của em..."
+                        class="w-full px-3.5 py-2 rounded-2xl border-2 border-slate-200 focus:border-doiGreen focus:outline-none text-sm font-semibold"></textarea>
+                </div>
+                <button type="submit" class="btn-bounce w-full bg-doiGreen text-white font-extrabold py-2.5 rounded-2xl shadow-playful-green cursor-pointer">
+                    ✨ Trưng bày ngay lên Góc Sáng Tạo
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= TOAST THÔNG BÁO THÂN THIỆN ================= -->
+    <div id="toastNotification" class="hidden fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border-2 border-doiYellow flex items-center gap-3 animate-pop max-w-sm">
+        <span id="toastIcon" class="text-2xl">🌟</span>
+        <span id="toastText" class="text-xs sm:text-sm font-bold"></span>
+    </div>
+
+    <!-- ================= JAVASCRIPT TƯƠNG TÁC ================= -->
+    <script>
+        /* -------------------------------------------------------------------
+           1. DỮ LIỆU MINI-QUIZ ĐỐ VUI LỊCH SỬ ĐỘI
+        ------------------------------------------------------------------- */
+        const quizQuestions = [
+            {
+                q: "Câu 1: Đội Thiếu niên Tiền phong Hồ Chí Minh được thành lập vào ngày tháng năm nào?",
+                options: ["15/5/1941", "26/3/1931", "19/5/1890"],
+                correct: 0,
+                explain: "Chính xác! Ngày 15/5/1941 tại thôn Nà Mạ, xã Trường Hà, huyện Hà Quảng, tỉnh Cao Bằng."
+            },
+            {
+                q: "Câu 2: Người Đội trưởng đầu tiên của Đội Nhi đồng Cứu quốc là ai?",
+                options: ["Anh Võ Văn Ký", "Anh Kim Đồng (Nông Văn Dền)", "Chị Võ Thị Sáu"],
+                correct: 1,
+                explain: "Tuyệt vời! Anh Kim Đồng (tên thật là Nông Văn Dền) là người Đội trưởng đầu tiên dũng cảm."
+            },
+            {
+                q: "Câu 3: Quần đảo tiền tiêu thiêng liêng nào của Tổ quốc trực thuộc tỉnh Khánh Hòa?",
+                options: ["Quần đảo Côn Đảo", "Quần đảo Trường Sa", "Đảo Phú Quốc"],
+                correct: 1,
+                explain: "Đúng rồi! Quần đảo Trường Sa thuộc tỉnh Khánh Hòa là niềm tự hào của thiếu nhi quê hương ta."
+            }
+        ];
+
+        let quizScore = 0;
+        let answeredQuestions = new Set();
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+            quizQuestions.forEach((item, qIdx) => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-3.5 rounded-2xl border border-amber-200 shadow-xs';
+                card.innerHTML = `
+                    <p class="font-extrabold text-xs sm:text-sm text-slate-800 mb-2">${item.q}</p>
+                    <div class="grid grid-cols-1 gap-1.5" id="q-opts-${qIdx}">
+                        ${item.options.map((opt, oIdx) => `
+                            <button onclick="answerQuiz(${qIdx}, ${oIdx}, this)"
+                                class="text-left text-xs font-bold px-3 py-2 rounded-xl border border-slate-200 hover:bg-amber-50 transition cursor-pointer">
+                                ${String.fromCharCode(65 + oIdx)}. ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <p id="q-exp-${qIdx}" class="hidden mt-2 text-xs font-bold"></p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function answerQuiz(qIdx, oIdx, btnEl) {
+            if (answeredQuestions.has(qIdx)) return;
+            answeredQuestions.add(qIdx);
+
+            const item = quizQuestions[qIdx];
+            const optsContainer = document.getElementById(`q-opts-${qIdx}`);
+            const expEl = document.getElementById(`q-exp-${qIdx}`);
+            const allBtns = optsContainer.querySelectorAll('button');
+
+            allBtns.forEach((b, idx) => {
+                b.disabled = true;
+                if (idx === item.correct) {
+                    b.classList.add('bg-emerald-100', 'border-doiGreen', 'text-emerald-900');
+                }
+            });
+
+            expEl.classList.remove('hidden');
+            if (oIdx === item.correct) {
+                quizScore++;
+                expEl.className = 'mt-2 text-xs font-extrabold text-doiGreen';
+                expEl.textContent = '🎉 ' + item.explain;
+                spawnCelebration(btnEl, ['⭐', '🌟', '🎉']);
+            } else {
+                btnEl.classList.add('bg-red-100', 'border-doiRed', 'text-red-900');
+                expEl.className = 'mt-2 text-xs font-extrabold text-doiRed';
+                expEl.textContent = '💡 Chưa đúng rồi! ' + item.explain;
+            }
+
+            document.getElementById('quizScoreBadge').textContent = `Điểm: ${quizScore}/${quizQuestions.length}`;
+
+            if (answeredQuestions.size === quizQuestions.length) {
+                const resBox = document.getElementById('quizResultBox');
+                const resText = document.getElementById('quizResultText');
+                resBox.classList.remove('hidden');
+                if (quizScore === 3) {
+                    resText.textContent = 'Xuất sắc! Em đạt 3/3 điểm và nhận danh hiệu “Nhà Sử Học Nhí Vĩnh Hải 2”!';
+                    spawnCelebration(resBox, ['🏆', '⭐', '🌺', '🎊']);
+                } else {
+                    resText.textContent = `Em đã trả lời đúng ${quizScore}/3 câu. Cố gắng đạt điểm tuyệt đối ở lượt sau nhé!`;
+                }
+            }
+        }
+
+        function resetQuiz() {
+            quizScore = 0;
+            answeredQuestions.clear();
+            document.getElementById('quizScoreBadge').textContent = `Điểm: 0/3`;
+            document.getElementById('quizResultBox').classList.add('hidden');
+            renderQuiz();
+        }
+
+        /* -------------------------------------------------------------------
+           2. CHUYỂN TAB CHUYÊN MỤC & TÌM KIẾM NHANH
+        ------------------------------------------------------------------- */
+        function switchTab(tabName) {
+            const sections = document.querySelectorAll('.portal-section');
+            const pills = document.querySelectorAll('.nav-pill');
+
+            sections.forEach(sec => {
+                if (tabName === 'all' || sec.dataset.category === tabName) {
+                    sec.classList.remove('hidden');
+                } else {
+                    sec.classList.add('hidden');
+                }
+            });
+
+            pills.forEach(pill => {
+                if (pill.dataset.tab === tabName) {
+                    pill.classList.add('ring-4', 'ring-amber-300', 'scale-105');
+                } else {
+                    pill.classList.remove('ring-4', 'ring-amber-300', 'scale-105');
+                }
+            });
+
+            if (tabName !== 'all') {
+                const target = document.getElementById(`sec-${tabName}`);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        }
+
+        function handleGlobalSearch(event) {
+            const keyword = event.target.value.trim().toLowerCase();
+            const banner = document.getElementById('searchStatusBanner');
+            const statusText = document.getElementById('searchStatusText');
+            const cards = document.querySelectorAll('.searchable-card');
+
+            if (!keyword) {
+                banner.classList.add('hidden');
+                cards.forEach(c => c.classList.remove('hidden'));
+                return;
+            }
+
+            // Hiển thị tất cả chuyên mục khi tìm kiếm
+            document.querySelectorAll('.portal-section').forEach(sec => sec.classList.remove('hidden'));
+
+            let matchCount = 0;
+            cards.forEach(card => {
+                const content = card.textContent.toLowerCase();
+                if (content.includes(keyword)) {
+                    card.classList.remove('hidden');
+                    matchCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            banner.classList.remove('hidden');
+            statusText.textContent = `🔍 Tìm thấy ${matchCount} nội dung phù hợp với từ khóa "${event.target.value}"`;
+        }
+
+        function clearSearch() {
+            document.getElementById('globalSearchInput').value = '';
+            document.getElementById('searchStatusBanner').classList.add('hidden');
+            document.querySelectorAll('.searchable-card').forEach(c => c.classList.remove('hidden'));
+        }
+
+        /* -------------------------------------------------------------------
+           3. CHẾ ĐỘ CHỮ TO DỄ ĐỌC CHO HỌC SINH TIỂU HỌC
+        ------------------------------------------------------------------- */
+        function toggleKidFriendlyMode() {
+            const isEnabled = document.body.classList.toggle('kid-friendly-mode');
+            const label = document.getElementById('kidModeLabel');
+            if (isEnabled) {
+                label.textContent = 'Cỡ chữ mặc định';
+                showToast('👓', 'Đã bật chế độ Chữ to dễ đọc cho các em nhỏ!');
+            } else {
+                label.textContent = 'Chữ to dễ đọc';
+                showToast('✨', 'Đã trở về cỡ chữ tiêu chuẩn.');
+            }
+        }
+
+        /* -------------------------------------------------------------------
+           4. THẢ HOA TUYÊN DƯƠNG / TẶNG TIM & HIỆU ỨNG NGÔI SAO BAY
+        ------------------------------------------------------------------- */
+        function praiseStudent(btnEl, id) {
+            const badge = btnEl.querySelector('.count-badge');
+            if (badge) {
+                const current = parseInt(badge.textContent, 10) || 0;
+                badge.textContent = current + 1;
+            }
+
+            // Cập nhật tổng số việc tốt trên Hero Banner
+            const heroCount = document.getElementById('heroGoodDeedCount');
+            if (heroCount) {
+                const num = parseInt(heroCount.textContent.replace(/\./g, ''), 10) + 1;
+                heroCount.textContent = num.toLocaleString('vi-VN');
+            }
+
+            spawnCelebration(btnEl, ['🌺', '⭐', '🌻', '❤️']);
+            showToast('🌺', 'Cảm ơn em đã gửi một bông hoa tuyên dương việc tốt!');
+        }
+
+        function spawnCelebration(originEl, emojis) {
+            const rect = originEl.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 10; i++) {
+                const particle = document.createElement('span');
+                particle.className = 'particle';
+                particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                particle.style.left = `${centerX}px`;
+                particle.style.top = `${centerY}px`;
+
+                const tx = (Math.random() - 0.5) * 180;
+                const ty = -60 - Math.random() * 120;
+                const rot = (Math.random() - 0.5) * 360;
+
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.setProperty('--rot', `${rot}deg`);
+
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1400);
+            }
+        }
+
+        /* -------------------------------------------------------------------
+           5. CẨM NANG NGHI THỨC ĐỘI & TRÌNH MÔ PHỎNG TRỐNG ĐỘI
+        ------------------------------------------------------------------- */
+        const guideContents = {
+            'khan-quang': {
+                title: '🧣 4 Bước Thắt Khăn Quàng Đỏ Chuẩn Đẹp',
+                html: `
+                    <div class="bg-red-50 p-3.5 rounded-2xl border border-red-200">
+                        <p class="font-extrabold text-doiRed">Bước 1: Gấp khăn</p>
+                        <p>Dùng hai tay dựng cổ áo lên. Gấp xếp chiều cao của khăn cho cân đối (để lại phần đuôi khăn rộng khoảng 15 - 20cm).</p>
+                    </div>
+                    <div class="bg-amber-50 p-3.5 rounded-2xl border border-amber-200">
+                        <p class="font-extrabold text-amber-700">Bước 2: Đặt khăn lên cổ</p>
+                        <p>Đặt khăn vào cổ áo, so hai đầu khăn bằng nhau.</p>
+                    </div>
+                    <div class="bg-sky-50 p-3.5 rounded-2xl border border-sky-200">
+                        <p class="font-extrabold text-doiBlue">Bước 3: Thắt nút khăn</p>
+                        <p>Đặt dải khăn bên trái lên trên dải khăn bên phải, vòng đuôi khăn bên trái vào trong, đưa lên kéo ra phía ngoài tạo thành nút thứ nhất. Tiếp tục lấy dải khăn bên trái vòng xuống dưới dải khăn bên phải để thắt nút vuông.</p>
+                    </div>
+                    <div class="bg-emerald-50 p-3.5 rounded-2xl border border-emerald-200">
+                        <p class="font-extrabold text-doiGreen">Bước 4: Chỉnh sửa ngay ngắn</p>
+                        <p>Chỉnh cho hai dải khăn xòe đều, nút khăn vuông vắn nằm ngay giữa cổ áo và bẻ cổ áo xuống ngay ngắn.</p>
+                    </div>
+                `
+            },
+            'bay-yeu-cau': {
+                title: '🏅 7 Yêu Cầu Đối Với Đội Viên',
+                html: `
+                    <ol class="list-decimal pl-5 space-y-2 font-semibold">
+                        <li><strong>Thuộc, hát đúng Quốc ca, Đội ca</strong> và một số bài hát truyền thống của Đội.</li>
+                        <li><strong>Thắt khăn, tháo khăn quàng đỏ</strong> nhanh, gọn, đúng quy định.</li>
+                        <li><strong>Chào kiểu Đội viên</strong> đúng tư thế và hiểu ý nghĩa của lời chào.</li>
+                        <li><strong>Biết hô, đáp khẩu hiệu Đội</strong> to, rõ ràng, dõng dạc.</li>
+                        <li><strong>Thực hiện đúng các động tác cá nhân tại chỗ và di động</strong> (nghiêm, nghỉ, quay trái, quay phải, đằng sau quay, giậm chân tại chỗ, đi đều).</li>
+                        <li><strong>Biết các bài trống quy định</strong> (Trống chào cờ, trống hành tiến, trống chào mừng).</li>
+                        <li><strong>Biết tổ chức và tham gia các trò chơi, múa hát tập thể</strong> vui tươi, lành mạnh.</li>
+                    </ol>
+                `
+            },
+            'chao-doi-vien': {
+                title: '🫡 Tư Thế Chào Kiểu Đội Viên',
+                html: `
+                    <p class="font-bold text-doiBlue">Tư thế thực hiện:</p>
+                    <p>Đội viên đứng ở tư thế nghiêm, mắt hướng về phía chào, tay phải giơ lên đầu, các ngón tay khép kín giơ thẳng (ngón cái áp sát ngón trỏ), bàn tay cách đỉnh đầu bên phải khoảng 5cm, khuỷu tay hướng chếch về phía trước.</p>
+                    <div class="bg-amber-50 p-3.5 rounded-2xl border border-amber-200 mt-2">
+                        <p class="font-extrabold text-amber-800">🌟 Ý nghĩa cao đẹp:</p>
+                        <p>Năm ngón tay khép kín tượng trưng cho sự đoàn kết của thiếu nhi Việt Nam dưới lá cờ Tổ quốc, luôn đặt lợi ích của Tổ quốc và tập thể lên trên hết!</p>
+                    </div>
+                `
+            },
+            'nut-day': {
+                title: '🪢 Nút Dây Cơ Bản & Sinh Hoạt Tập Thể',
+                html: `
+                    <div class="space-y-2.5">
+                        <div class="p-3 bg-emerald-50 rounded-2xl border border-emerald-200">
+                            <p class="font-extrabold text-doiGreen">1. Nút dẹt (Nút vuông):</p>
+                            <p>Dùng để nối hai đầu dây có kích thước bằng nhau hoặc buộc băng cứu thương, rất chắc chắn và dễ tháo.</p>
+                        </div>
+                        <div class="p-3 bg-sky-50 rounded-2xl border border-sky-200">
+                            <p class="font-extrabold text-doiBlue">2. Nút thuyền chài:</p>
+                            <p>Dùng để buộc dây vào cọc lều khi đi cắm trại dã ngoại.</p>
+                        </div>
+                        <div class="p-3 bg-amber-50 rounded-2xl border border-amber-200">
+                            <p class="font-extrabold text-amber-700">3. Sinh hoạt Sao Nhi đồng:</p>
+                            <p>Các anh chị Phụ trách Sao hướng dẫn các em lớp 1, 2, 3 hát múa tập thể, kể chuyện Bác Hồ và chơi các trò chơi dân gian.</p>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        function openGuideModal(key) {
+            const data = guideContents[key];
+            if (!data) return;
+            document.getElementById('guideModalTitle').textContent = data.title;
+            document.getElementById('guideModalBody').innerHTML = data.html;
+            document.getElementById('guideModal').classList.remove('hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Trình mô phỏng Trống Đội dùng Tone.js
+        let drumTimer = null;
+        let drumSynth = null;
+
+        async function playDrumPattern(type) {
+            stopDrumPattern();
+            try {
+                if (typeof Tone !== 'undefined') {
+                    await Tone.start();
+                    if (!drumSynth) {
+                        drumSynth = new Tone.MembraneSynth({
+                            pitchDecay: 0.03,
+                            octaves: 3,
+                            envelope: { attack: 0.001, decay: 0.2, sustain: 0.01, release: 0.2 }
+                        }).toDestination();
+                    }
+                }
+            } catch (e) {
+                console.warn('Audio context init fallback:', e);
+            }
+
+            const statusEl = document.getElementById('drumStatusText');
+            const visualEl = document.getElementById('drumVisual');
+
+            const patterns = {
+                'chao-co': {
+                    label: '🎺 Đang phát nhịp: TRỐNG CHÀO CỜ (Tùng... tùng... tùng tùng tùng!)',
+                    intervals: [450, 450, 220, 220, 600]
+                },
+                'hanh-tien': {
+                    label: '🚶 Đang phát nhịp: TRỐNG HÀNH TIẾN (1 - 2, 1 - 2 đều bước!)',
+                    intervals: [400, 400, 200, 200, 400]
+                },
+                'chao-mung': {
+                    label: '🎉 Đang phát nhịp: TRỐNG CHÀO MỪNG (Tùng cắc tùng cắc tùng tùng tùng!)',
+                    intervals: [250, 250, 250, 250, 200, 200, 500]
+                }
+            };
+
+            const selected = patterns[type];
+            statusEl.textContent = selected.label;
+            let step = 0;
+
+            function triggerBeat() {
+                if (drumSynth) {
+                    const note = step % 2 === 0 ? 'C2' : 'G2';
+                    drumSynth.triggerAttackRelease(note, '16n');
+                }
+                visualEl.classList.remove('drum-active');
+                void visualEl.offsetWidth; // trigger reflow
+                visualEl.classList.add('drum-active');
+
+                const delay = selected.intervals[step % selected.intervals.length];
+                step++;
+                drumTimer = setTimeout(triggerBeat, delay);
+            }
+
+            triggerBeat();
+        }
+
+        function stopDrumPattern() {
+            if (drumTimer) {
+                clearTimeout(drumTimer);
+                drumTimer = null;
+            }
+            const statusEl = document.getElementById('drumStatusText');
+            if (statusEl) {
+                statusEl.textContent = 'Đã dừng trống. Bấm chọn một bài trống để luyện tập tiếp nhé!';
+            }
+        }
+
+        /* -------------------------------------------------------------------
+           6. GÓC SÁNG TẠO MĂNG NON (LỌC & THÊM TÁC PHẨM MỚI)
+        ------------------------------------------------------------------- */
+        function filterGallery(type, btnEl) {
+            const items = document.querySelectorAll('.gallery-item');
+            const btns = document.querySelectorAll('.gallery-filter-btn');
+
+            btns.forEach(b => {
+                b.classList.remove('bg-doiGreen', 'text-white');
+                b.classList.add('bg-white', 'text-slate-700');
+            });
+            btnEl.classList.remove('bg-white', 'text-slate-700');
+            btnEl.classList.add('bg-doiGreen', 'text-white');
+
+            items.forEach(item => {
+                if (type === 'all' || item.dataset.type === type) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
+        function viewArtDetail(title, author, type, desc) {
+            document.getElementById('artDetailTitle').textContent = title;
+            document.getElementById('artDetailAuthor').textContent = 'Tác giả: ' + author;
+            document.getElementById('artDetailType').textContent = type;
+            document.getElementById('artDetailDesc').textContent = desc;
+            document.getElementById('artDetailModal').classList.remove('hidden');
+        }
+
+        function openArtModal() {
+            document.getElementById('submitArtModal').classList.remove('hidden');
+        }
+
+        function handleAddArtwork(e) {
+            e.preventDefault();
+            const title = document.getElementById('artTitleInput').value.trim();
+            const author = document.getElementById('artAuthorInput').value.trim();
+            const className = document.getElementById('artClassInput').value.trim();
+            const type = document.getElementById('artTypeInput').value;
+            const desc = document.getElementById('artDescInput').value.trim();
+
+            const typeConfig = {
+                'tranh-ve': { badge: '🖌️ Tranh vẽ', badgeColor: 'bg-doiRed', bg: 'from-amber-200 to-rose-200', icon: '🎨' },
+                'video': { badge: '🎬 Video', badgeColor: 'bg-doiBlue', bg: 'from-sky-200 to-indigo-200', icon: '🎥' },
+                'tai-che': { badge: '♻️ Tái chế', badgeColor: 'bg-doiGreen', bg: 'from-emerald-200 to-lime-200', icon: '🌱' }
+            };
+            const cfg = typeConfig[type] || typeConfig['tranh-ve'];
+
+            const grid = document.getElementById('creativeGalleryGrid');
+            const newCard = document.createElement('div');
+            newCard.className = 'gallery-item bg-white rounded-3xl overflow-hidden border-2 border-doiYellow shadow-playful flex flex-col justify-between animate-pop searchable-card';
+            newCard.dataset.type = type;
+            newCard.innerHTML = `
+                <div>
+                    <div class="h-44 bg-gradient-to-br ${cfg.bg} relative p-3 flex flex-col items-center justify-center">
+                        <div class="text-6xl">${cfg.icon}</div>
+                        <span class="mt-2 text-xs font-extrabold text-slate-800 bg-white/85 px-3 py-0.5 rounded-full">Tác phẩm mới gửi</span>
+                        <span class="absolute top-2.5 left-2.5 ${cfg.badgeColor} text-white text-xs font-extrabold px-2.5 py-0.5 rounded-full">${cfg.badge}</span>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-extrabold text-base text-slate-800">${escapeHtml(title)}</h4>
+                        <p class="text-xs font-bold text-doiGreen mt-1">Tác giả: ${escapeHtml(author)} – ${escapeHtml(className)}</p>
+                        <p class="text-xs text-slate-600 mt-1.5">${escapeHtml(desc)}</p>
+                    </div>
+                </div>
+                <div class="px-4 pb-4 flex items-center justify-between">
+                    <button onclick="viewArtDetail('${escapeHtml(title)}', '${escapeHtml(author)} – ${escapeHtml(className)}', '${cfg.badge}', '${escapeHtml(desc)}')"
+                        class="text-xs font-extrabold text-doiBlue hover:underline cursor-pointer">
+                        🔍 Xem chi tiết
+                    </button>
+                    <button onclick="praiseStudent(this, 'new-art')" class="bg-rose-50 hover:bg-rose-100 text-doiRed font-extrabold text-xs px-3 py-1.5 rounded-full cursor-pointer">
+                        ❤️ <span class="count-badge">1</span>
+                    </button>
+                </div>
+            `;
+
+            grid.prepend(newCard);
+            e.target.reset();
+            closeModal('submitArtModal');
+            spawnCelebration(grid, ['🎨', '⭐', '🎉', '🌺']);
+            showToast('🎨', `Tuyệt vời! Tác phẩm "${title}" đã được trưng bày lên Góc Sáng Tạo!`);
+        }
+
+        /* -------------------------------------------------------------------
+           7. HỘP THƯ BÚP MĂNG LẮNG NGHE
+        ------------------------------------------------------------------- */
+        function toggleAnonymous(checkbox) {
+            const nameInput = document.getElementById('senderName');
+            const classInput = document.getElementById('senderClass');
+            if (checkbox.checked) {
+                nameInput.value = '';
+                nameInput.disabled = true;
+                nameInput.placeholder = 'Đang bật chế độ Búp măng bí mật';
+                classInput.placeholder = 'Không bắt buộc';
+            } else {
+                nameInput.disabled = false;
+                nameInput.placeholder = 'Ví dụ: Nguyễn Lan Anh';
+                classInput.placeholder = 'Ví dụ: Lớp 4A1';
+            }
+        }
+
+        function submitMailbox(e) {
+            e.preventDefault();
+            const topic = document.querySelector('input[name="mailTopic"]:checked').value;
+            const mood = document.querySelector('input[name="mood"]:checked').value;
+            const isAnon = document.getElementById('anonymousCheck').checked;
+            const rawName = document.getElementById('senderName').value.trim();
+            const rawClass = document.getElementById('senderClass').value.trim();
+            const message = document.getElementById('mailMessage').value.trim();
+
+            if (!message) return;
+
+            const displayName = isAnon
+                ? 'Búp măng bí mật'
+                : `${rawName || 'Đội viên Vĩnh Hải 2'}${rawClass ? ' • ' + rawClass : ''}`;
+
+            // Hiển thị thông báo xác nhận từ Cô Tổng phụ trách
+            const successBanner = document.getElementById('mailSuccessBanner');
+            const successDetail = document.getElementById('mailSuccessDetail');
+            successBanner.classList.remove('hidden');
+            successDetail.textContent = `Cảm ơn ${displayName} đã gửi lời nhắn về chủ đề "${topic}" với tâm trạng ${mood}. Liên đội sẽ xem xét và phản hồi sớm nhất nhé!`;
+
+            // Thêm lời nhắn mới lên Góc Hồi Âm bên phải
+            const list = document.getElementById('repliedMessagesList');
+            const card = document.createElement('div');
+            card.className = 'bg-white p-3.5 rounded-2xl border-2 border-pink-300 shadow-xs animate-pop searchable-card';
+            card.innerHTML = `
+                <div class="flex items-center justify-between text-xs font-extrabold mb-1">
+                    <span class="text-purple-700">💌 ${escapeHtml(topic)} • ${escapeHtml(displayName)}</span>
+                    <span class="bg-pink-100 text-pink-800 px-2 py-0.5 rounded-full">${mood}</span>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-700 font-semibold">“${escapeHtml(message)}”</p>
+                <div class="mt-2 pt-2 border-t border-dashed border-purple-200 text-xs text-doiGreen font-bold flex items-center gap-1.5">
+                    <span>✅</span>
+                    <span>Đã tiếp nhận vào Hộp thư Búp măng lắng nghe!</span>
+                </div>
+            `;
+            list.prepend(card);
+
+            spawnCelebration(successBanner, ['💌', '⭐', '💖', '🌟']);
+            showToast('💌', 'Đã gửi thư thành công vào Hộp thư Búp măng lắng nghe!');
+            e.target.reset();
+            document.getElementById('senderName').disabled = false;
+        }
+
+        /* -------------------------------------------------------------------
+           8. TIỆN ÍCH CHUNG (TOAST & ESCAPE HTML)
+        ------------------------------------------------------------------- */
+        let toastTimeout = null;
+        function showToast(icon, text) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastIcon').textContent = icon;
+            document.getElementById('toastText').textContent = text;
+            toast.classList.remove('hidden');
+
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3500);
+        }
+
+        function escapeHtml(str) {
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Khởi tạo giao diện khi tải trang
+        window.onload = function() {
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>
